@@ -19,6 +19,7 @@
   "homepage": "https://github.com/AoceanP/bby23TravelPlanner#readme",
   "dependencies": {
     "dotenv": "^16.5.0",
+    "express": "^5.1.0",
     "mongoose": "^8.14.0"
   }
 }
