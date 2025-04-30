@@ -1,4 +1,16 @@
 # bby23TravelPlanner
 
-//important
-"Create a .env file and paste your own MongoDB URI."
+A travel planner for people on a tight budget.
+
+## About Us
+
+Team Name: BBY-23
+Team Members:
+
+- Justice Plunkett
+- Daniel Saavedra
+- Marvin Yeung
+- Aleksander Panich
+- Amjadh Ebrahim
+
+## More details to come
