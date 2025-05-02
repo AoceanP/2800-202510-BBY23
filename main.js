@@ -53,6 +53,10 @@ const amadeus = new Amadeus({
 });
 
 app.get("/airport-search/:parameter", (req, res) => {
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
     amadeus.referenceData.locations.get({
         keyword: req.params.parameter,
         subType: Amadeus.location.any
@@ -65,6 +69,10 @@ app.get("/airport-search/:parameter", (req, res) => {
 });
 
 app.get("/flight-search", (req, res) => {
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
     const originCode = req.query.originCode;
     const destinationCode = req.query.destinationCode;
     const departureDate = req.query.departureDate;
@@ -84,6 +92,10 @@ app.get("/flight-search", (req, res) => {
 });
 
 app.post("/flight-confirmation", (req, res) => {
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
     const flight = req.body.flight;
     amadeus.shopping.flightOffers.pricing.post(
         JSON.stringify({
@@ -100,8 +112,11 @@ app.post("/flight-confirmation", (req, res) => {
 });
 
 app.post("/flight-booking", (req, res) => {
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
     const flight = req.body.flight;
-    const name = req.body.name;
     const documents = req.body.documents;
     amadeus.booking.flightOrders.post(
         JSON.stringify({
