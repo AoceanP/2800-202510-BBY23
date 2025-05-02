@@ -3,6 +3,9 @@ const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const { MongoClient } = require('mongodb');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const Amadeus = require('amadeus');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const joi = require('joi');
@@ -35,7 +38,97 @@ app.use(session({
     secret: process.env.SESSION_SECRET
 }));
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 
+// Initialize Amadeus API client
+const amadeus = new Amadeus({
+    clientId: process.env.AMADEUS_CLIENT_ID,
+    clientSecret: process.env.AMADEUS_CLIENT_SECRET
+});
+
+app.get("/airport-search/:parameter", (req, res) => {
+    amadeus.referenceData.locations.get({
+        keyword: req.params.parameter,
+        subType: Amadeus.location.any
+    }).then(response => {
+        res.send(response.result);
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send("Error fetching data from Amadeus API");
+    });
+});
+
+app.get("/flight-search", (req, res) => {
+    const originCode = req.query.originCode;
+    const destinationCode = req.query.destinationCode;
+    const departureDate = req.query.departureDate;
+    amadeus.shopping.flightOffersSearch.get({
+        originLocationCode: originCode,
+        destinationLocationCode: destinationCode,
+        departureDate: departureDate,
+        adults: 1,
+        max: '7',
+        currencyCode: "CAD"
+    }).then(response => {
+        res.send(response.result);
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send("Error fetching data from Amadeus API");
+    });
+});
+
+app.post("/flight-confirmation", (req, res) => {
+    const flight = req.body.flight;
+    amadeus.shopping.flightOffers.pricing.post(
+        JSON.stringify({
+            'data': {
+                'type': 'flight-offers-pricing',
+                'flightOffers': [flight],
+            }
+        })
+    ).then(response => {
+        res.send(response.result);
+    }).catch(err => {
+        res.send(err);
+    });
+});
+
+app.post("/flight-booking", (req, res) => {
+    const flight = req.body.flight;
+    const name = req.body.name;
+    const documents = req.body.documents;
+    amadeus.booking.flightOrders.post(
+        JSON.stringify({
+            'data': {
+                'type': 'flight-order',
+                'flightOffers': [flight],
+                'travelers': [{
+                    "id": "1",
+                    "dateOfBirth": "1982-01-16",
+                    "name": req.session.user.name,
+                    "contact": {
+                        "emailAddress": req.session.user.email,
+                        "phones": [{
+                            "deviceType": "MOBILE",
+                            "countryCallingCode": "34",
+                            "number": "480080076"
+                        }]
+                    },
+                    "documents": documents
+                }]
+            }
+        })
+    ).then(response => {
+        res.send(response.result);
+    }).catch(err => {
+        res.send(err);
+    });
+});
 // Default route - send index.html if user visits "/"
 app.get('/', (req, res) => {
     if (req.session.user) {
@@ -63,7 +156,6 @@ app.post('/loginUser', (req, res) => {
         res.redirect("/login");
     } else {
         users.findOne({ email: req.body.email }).then(user => {
-            console.log(user);
             if (!user) {
                 res.redirect("/signup");
             } else if (bcrypt.compareSync(req.body.password, user.password)) {
@@ -77,7 +169,7 @@ app.post('/loginUser', (req, res) => {
 
 app.get("/planner", (req, res) => {
     if (req.session.user) {
-        res.send("Hello " + req.session.user.name);
+        res.sendFile(path.join(__dirname, 'public', 'planner.html'));
     } else {
         res.redirect("/");
     }
@@ -103,7 +195,7 @@ app.post('/signupUser', async (req, res) => {
     if (query.error) {
         res.redirect("/signup");
     } else {
-        
+
         if (await users.findOne({ email: req.body.email })) {
             res.redirect("/login");
         } else {
