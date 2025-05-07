@@ -121,6 +121,10 @@ app.post('/signupUser', async (req, res) => {
     }
 });
 
+app.use((req, res) => {
+    res.status(404).render('404');
+});
+
 // Start server
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);

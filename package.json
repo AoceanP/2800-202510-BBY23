@@ -1,7 +1,7 @@
 {
   "name": "bby23travelplanner",
   "version": "1.0.0",
-  "description": "",
+  "description": "A travel planner for people on a tight budget.",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -26,5 +26,6 @@
     "express-session": "^1.18.1",
     "joi": "^17.13.3",
     "mongodb": "^6.16.0"
-  }
+  },
+  "type": "commonjs"
 }
