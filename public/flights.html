@@ -1,4 +1,36 @@
 <!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/flights.css">
+</head>
+
+<body>
+    <h1>Flights</h1>
+    <form id="flight-search-form">
+        <label for="departure">Departure:</label>
+        <input type="text" id="departure" name="departure" autocomplete="home city" placeholder="Departure City"
+            required><br>
+        <label for="arrival">Arrival:</label>
+        <input type="text" id="arrival" name="arrival" placeholder="Arrival City" autocomplete="city" required><br>
+        <label for="departure-date">Departure Date:</label>
+        <input type="date" id="departure-date" name="departure-date" required><br>
+        <label for="return-date">Return Date:</label>
+        <input type="date" id="return-date" name="return-date"><br>
+        <button type="submit" id="searchBtn">Search Flights</button>
+    </form>
+    <div id="flight-list"></div>
+    <template id="flight-template">
+        <div class="flight-item">
+            <h2 class="flight-name"></h2>
+            <p class="flight-details"></p>
+            <button class="book-button">Book</button>
+        </div>
+        <script src="/js/flights.js"></script>
+</body><!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>

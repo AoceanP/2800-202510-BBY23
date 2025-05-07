@@ -191,11 +191,30 @@ app.get("/planner", (req, res) => {
     }
 });
 
+app.get("/logout", (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error logging out");
+        } else {
+            res.redirect("/login");
+        }
+    });
+});
+
 app.get('/signup', (req, res) => {
     if (req.session.user) {
         res.redirect("/planner");
     } else {
         res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+    }
+});
+
+app.get('/transit', (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'transit.html'));
+    } else {
+        res.redirect("/login");
     }
 });
 
@@ -229,6 +248,13 @@ app.post('/signupUser', async (req, res) => {
     }
 });
 
+app.get("/flights", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'flights.html'));
+    } else {
+        res.redirect("/");
+    }
+});
 
 // Start server
 app.listen(PORT, () => {
