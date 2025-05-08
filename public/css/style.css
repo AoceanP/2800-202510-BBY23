@@ -1,5 +1,230 @@
+<<<<<<< HEAD
 #cover {
     max-width: 50%;
     margin-left: auto;
     margin-right: auto;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+#bodycontainer {
+    display: grid;
+    grid-template-rows: 6% auto 7%;
+    height: 100vh;
+}
+
+.nav {
+    display: flex;
+    padding: 10px 10px;
+}
+
+.nav i {
+    font-size: 1.5rem;
+}
+
+.nav-title {
+    flex-grow: 1;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#content {
+    padding: 2%;
+}
+
+#footerPlaceholder {
+    background-color: gray;
+}
+
+.footer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    text-align: center;
+}
+
+#footer {
+    padding: 1vh 20px;
+}
+
+.footer div {
+    padding-top: 1vh;
+}
+
+#footerbtn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#footerbtn a {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+}
+
+#footerbtn i {
+    font-size: 2rem;
+}
+
+#footerbtn span {
+    font-size: 1rem;
+}
+
+#plannerBtns {
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 0.5em;
+}
+
+#plannerBtnsTop {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    text-align: center;
+}
+
+#plannerBtnBottom {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    text-align: center;
+}
+
+#plannerBtn {
+    padding: 5px;
+    max-width: 100px;
+    margin: 0 auto;
+}
+
+#plannerBtn a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+#plannerBtn i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5em;
+}
+
+#plannerBtn span {
+    font-size: 0.9rem;
+}
+
+#cover {
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: sans-serif;
+  }
+.welcome-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background:
+    url("/img/bg_app.png") no-repeat center/cover;
+}
+
+.welcome-content {
+  text-align: center;
+  position:relative;
+  bottom: 50px;
+}
+
+.welcome-content h1 {
+  font-size: 6.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.5rem;
+
+}
+
+.motto {
+  font-size: 1.25rem;
+  color: #fff;
+  margin: 0 0;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  top: 150px;
+}
+
+.btn-teal {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background-color: #4fa698;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 16px;
+  border: none;
+}
+  
+.logo{
+    width: 250px;
+    height: auto;
+}
+
+.login_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .email,
+  .password {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.5rem 2rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+  }
+  
+.signup_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+.signup_form .signup {
+    width: 100%;
+    max-width: 320px;
+    padding: 0.5rem 2rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 16px;
+  }
+
+.signup-button-group{
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    top: 95px;
 }

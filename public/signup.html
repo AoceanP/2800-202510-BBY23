@@ -1,18 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <head>
-    <title>Budget Travel</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/css/style.css">
+  <title>Budget Traveller</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Sign Up!</h1>
-    <form action="/signupUser" method="post">
-        <input type="text" name="email" placeholder="Email">
-        <input type="text" name="username" placeholder="Username">
-        <input type="text" name="name" placeholder="Name">
-        <input type="password" name="password" placeholder="Password">
-        <input type="password" name="password2" placeholder="Confirm Password">
-        <button>Sign Up!</button>
-    </form>
-
+  <div class="welcome-page">
+    <div class="welcome-content">
+      <img class="logo" src="/img/logoname.png">
+      <p class="motto">See the world with <br> your itinerary in hand</p>
+      <div class="signup-button-group">
+        <form action="/signupUser" method="post" class="signup_form">
+          <input class="signup" type="text"  name="name"     placeholder="Name">
+          <input class="signup" type="text"  name="username"  placeholder="Username">
+          <input class="signup" type="text"  name="email"      placeholder="Email">
+          <input class="signup" type="password" name="password"  placeholder="Password">
+          <input class="signup" type="password" name="password2" placeholder="Confirm Password">
+        </form>
+        <button  type="submit" class="btn-teal">Sign Up</button>
+      </div>
+    </div>
+  </div>
 </body>
+</html>
