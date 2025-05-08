@@ -15,7 +15,7 @@ window.onload = () => {
                     const data = await response.json();
 
                     if (response.ok) {
-                        temperature.textContent = `${Math.round(data.main.temp)}°C`;
+                        temperature.textContent = `${data.main.temp.toFixed(1)}°C`;
                         description.textContent = data.weather[0].description;
                         location.textContent = `Location: ${data.name}`;
                         error.textContent = '';
