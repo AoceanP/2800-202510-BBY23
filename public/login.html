@@ -1,16 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <head>
-    <title>Budget Travel</title>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/css/style.css">
+  <title>Budget Traveller</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
-    <h1>Log In!</h1>
-    <form action="/loginUser" method="post">
-        <input type="text" name="email" placeholder="Email">
-        <input type="password" name="password" placeholder="Password">
-        <button>Log In!</button>
-    </form>
-
+  <div class="welcome-page">
+    <div class="welcome-content">
+    <img class="logo" src="/img/logoname.png"> 
+      <p class="motto">See the world with <br> your itinerary in hand</p>
+      <div class="button-group">
+        <form action="/loginUser" method="post" class="login_form">
+            <input class="email" type="text" name="email" placeholder="Email">
+            <input class="password" type="password" name="password" placeholder="Password">
+        </form>
+        <button type="submit" class="btn-teal">Login</button>
+      </div>
+    </div>
+  </div>
 </body>
+</html>
