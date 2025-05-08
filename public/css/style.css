@@ -1,109 +1,111 @@
 #cover {
-  max-width: 50%;
-  margin-left: auto;
-  margin-right: auto;
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 html, body {
-  height: 100%;
-  margin: 0;
-  font-family: sans-serif;
-}
+    height: 100%;
+    margin: 0;
+    font-family: sans-serif;
+  }
 .welcome-page {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100%;
-background:
-  url("/img/bg_app.png") no-repeat center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background:
+    url("/img/bg_app.png") no-repeat center/cover;
 }
 
 .welcome-content {
-height: 250px;
-text-align: center;
-position:relative;
-bottom: 150px;
+  text-align: center;
+  position:relative;
+  bottom: 50px;
 }
 
 .welcome-content h1 {
-font-size: 6.5rem;
-font-weight: 700;
-color: #fff;
-margin: 0 0 0.5rem;
+  font-size: 6.5rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 0.5rem;
 
 }
 
 .motto {
-font-size: 1.25rem;
-color: #fff;
-margin: 0 0;
+  font-size: 1.25rem;
+  color: #fff;
+  margin: 0 0 2rem;
 }
 
 .button-group {
-display: flex;
-gap: 1rem;
-flex-direction: column;
-justify-content: center;
-position: relative;
-top: 250px;
-}
-
-.btn-teal {
-display: inline-block;
-padding: 0.5rem 1.5rem;
-background-color: #4fa698;
-color: #fff;
-text-decoration: none;
-border-radius: 50px;
-font-size: 16px;
-border: none;
-}
-
-.logo{
-  width: 250px;
-  height: auto;
-}
-
-.login_form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-}
-
-.email,
-.password {
-  width: 100%;
-  max-width: 320px;
-  padding: 0.5rem 1.5rem;
-  border: none;
-  border-radius: 999px;
-  font-size: 16px;
-}
-
-.signup_form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  width: 100%;
-}
-
-.signup_form .signup {
-  width: 100%;
-  max-width: 320px;
-  padding: .5rem 1.5rem;
-  border: none;
-  border-radius: 999px;
-  font-size: 16px;
-}
-
-.signup-button-group{
   display: flex;
   gap: 1rem;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  top: 100px;
+  top: 200px;
 }
+
+.btn-teal {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background-color: #4fa698;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 1.5rem;
+  border: none;
+}
+  
+.logo{
+    width: 400px;
+    height: auto;
+}
+
+.login_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .email,
+  .password {
+    width: 100%;
+    max-width: 320px;
+    padding: 1rem 2.2rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 20px;
+  }
+  
+.signup_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+.signup_form .signup {
+    width: 100%;
+    max-width: 320px;
+    padding: 1rem 2.2rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 20px;
+    flex-shrink: 0; 
+  }
+
+.signup-button-group{
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    top: 95px;
+}
+
+
