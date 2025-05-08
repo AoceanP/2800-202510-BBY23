@@ -51,22 +51,6 @@ const amadeus = new Amadeus({
     clientSecret: process.env.AMADEUS_CLIENT_SECRET
 });
 
-app.get("/airport-search/:parameter", (req, res) => {
-    if (!req.session.user) {
-        res.status(401).send("Unauthorized");
-        return;
-    }
-    amadeus.referenceData.locations.get({
-        keyword: req.params.parameter,
-        subType: Amadeus.location.any
-    }).then(response => {
-        res.send(response.result);
-    }).catch(err => {
-        console.error(err);
-        res.status(500).send("Error fetching data from Amadeus API");
-    });
-});
-
 app.get("/flight-search", (req, res) => {
     if (!req.session.user) {
         res.status(401).send("Unauthorized");
@@ -80,7 +64,7 @@ app.get("/flight-search", (req, res) => {
         destinationLocationCode: destinationCode,
         departureDate: departureDate,
         adults: 1,
-        max: '7',
+        max: '5',
         currencyCode: "CAD"
     }).then(response => {
         res.send(response.result);
