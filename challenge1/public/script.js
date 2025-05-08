@@ -3,7 +3,8 @@ window.onload = () => {
     const temperature = document.getElementById('temperature');
     const description = document.getElementById('description');
     const error = document.getElementById('error');
-
+    const icon = document.getElementById('custom-icon');
+  
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             async (position) => {
