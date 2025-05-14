@@ -1,0 +1,20 @@
+<!doctype html>
+<head>
+  <title>Get Suggestions</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="suggestions-page">
+        <div class="suggestions-content">
+        <h1>Get Travel Suggestions</h1>
+        <form id="suggestion-form" action="/getSuggestions" method="POST">
+            <label for="location">Enter a location:</label>
+            <input type="text" id="location" name="location" required>
+            <button type="submit">Get Suggestions</button>
+        </form>
+        <div id="suggestions"></div>
+        </div>
+  <script src="/js/suggestions.js"></script>
+</body>
+</html>
