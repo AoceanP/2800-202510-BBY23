@@ -273,7 +273,7 @@ app.post("/addCartItem", (req, res) => {
             name: joi.string().required(),
             id: joi.string().required(),
             price: joi.number().required(),
-            type: joi.string().required().valid("flight", "hotel", "car")
+            type: joi.string().required().valid("Flight", "Hotel", "Car")
         });
         let query = schema.validate(req.body);
         if (query.error) {
@@ -349,15 +349,41 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
     res.json({ received: true });
 });
 
+app.post("/clearCart", (req, res) => {
+    if (req.session.user) {
+        users.updateOne(
+        { email: req.session.user.email },
+        { $set: { cart: [] } }
+    ).then(() => {
+        console.log("Cart cleared");
+        res.send("Cart cleared");
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send("Error clearing cart");
+    });
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.get("/success", async (req, res) => {
     const sessionId = req.query.session_id;
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     console.log(session);
-    res.send(`
+    users.updateOne(
+        { email: req.session.user.email },
+        { $set: { cart: [] } }
+    ).then(() => {
+        console.log("Cart cleared");
+        res.send(`
         <h1>Payment Successful!</h1>
         <p>Session ID: ${sessionId}</p>
         <a href="/">Go back</a>
     `);
+    }).catch(err => {
+        console.error(err);
+    });
+
 });
 
 app.get("/cancel", (req, res) => {

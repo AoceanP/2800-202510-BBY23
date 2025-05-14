@@ -37,10 +37,10 @@ searchBtn.addEventListener('click', e => {
                     },
                     body: JSON.stringify(
                         { 
-                            name: offer.source,
+                            name: `${offer.source} - ${origin} to ${destination} on ${departureDate}`,
                             price: offer.price.total,
                             id: offer.id,
-                            type: "flight", 
+                            type: "Flight", 
                         }
                     )
                 }).then(response => {

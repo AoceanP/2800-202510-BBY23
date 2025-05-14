@@ -27,3 +27,23 @@ function loadItems() {
         });
 }
 loadItems();
+const clearCartBtn = document.getElementById("clear-cart-button");
+clearCartBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    fetch("/clearCart", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+        .then((response) => {
+            return response.text();
+        })
+        .then((data) => {
+            console.log(data);
+            loadItems();
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+});
