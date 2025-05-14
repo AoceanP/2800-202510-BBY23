@@ -10,9 +10,10 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const joi = require('joi');
 const genai = require('@google/genai');
+const Stripe = require('stripe');
 
-const aiBot = new genai.GoogleGenAI({apiKey: process.env.GENAI_API_KEY});
-
+const aiBot = new genai.GoogleGenAI({ apiKey: process.env.GENAI_API_KEY });
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const app = express();
 const PORT = process.env.PORT || 3000;
 const saltRounds = 12;
@@ -35,6 +36,7 @@ const client = new MongoClient(mongoURI);
 client.connect();
 const db = client.db("travelplanner");
 const users = db.collection("users");
+const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
 app.use(session({
     resave: false,
@@ -212,7 +214,7 @@ app.post('/signupUser', async (req, res) => {
         username: joi.string().required(),
         name: joi.string().required(),
         password: joi.string().required().min(5).max(20),
-        password2: joi.string().required().min(5).max(20)
+        password2: joi.string().required().valid(password)
     });
     let query = schema.validate(req.body);
     if (query.error) {
@@ -260,6 +262,144 @@ app.post("/getSuggestions", async (req, res) => {
             model: "gemini-2.5-flash-preview-04-17",
         });
         res.send(response.candidates[0].content.parts[0].text);
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.post("/addCartItem", (req, res) => {
+    if (req.session.user) {
+        const schema = joi.object({
+            name: joi.string().required(),
+            id: joi.string().required(),
+            price: joi.number().required(),
+            type: joi.string().required().valid("flight", "hotel", "car")
+        });
+        let query = schema.validate(req.body);
+        if (query.error) {
+            res.status(400).send("Invalid data");
+        } else {
+            users.updateOne(
+                { email: req.session.user.email },
+                { $addToSet: { cart: req.body } }
+            ).then(() => {
+                res.send("Item added to cart");
+            }).catch(err => {
+                console.error(err);
+                res.status(500).send("Error adding item to cart");
+            });
+        }
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/cart", (req, res) => {
+    if (req.session.user) {
+        users.findOne({ email: req.session.user.email }).then(user => {
+            if (user) {
+                res.sendFile(path.join(__dirname, "public", "cart.html"));
+            } else {
+                res.status(404).send("User not found");
+            }
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send("Error fetching user data");
+        });
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/getCartItems", (req, res) => {
+    if (req.session.user) {
+        users.findOne({ email: req.session.user.email }).then(user => {
+            if (user) {
+                res.send(user.cart);
+            } else {
+                res.status(404).send("User not found");
+            }
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send("Error fetching user data");
+        });
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
+    const sig = req.headers["stripe-signature"];
+    let event;
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
+    } catch (err) {
+        console.log(`Webhook Error: ${err.message}`);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+    // Handle the event
+    switch (event.type) {
+        case "checkout.session.completed":
+            const session = event.data.object;
+            console.log("Payment was successful!");
+            break;
+        default:
+            console.log(`Unhandled event type ${event.type}`);
+    }
+    res.json({ received: true });
+});
+
+app.get("/success", async (req, res) => {
+    const sessionId = req.query.session_id;
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    console.log(session);
+    res.send(`
+        <h1>Payment Successful!</h1>
+        <p>Session ID: ${sessionId}</p>
+        <a href="/">Go back</a>
+    `);
+});
+
+app.get("/cancel", (req, res) => {
+    res.send(`
+        <h1>Payment Cancelled</h1>
+        <a href="/">Go back</a>
+    `);
+});
+
+app.post("/checkout", async (req, res) => {
+    console.log("Checkout initiated");
+    if (req.session.user) {
+        const user = await users.findOne({ email: req.session.user.email });
+        if (user) {
+            const cartItems = user.cart;
+            let checkoutItems = [];
+            for (let item of cartItems) {
+                let product = await stripe.products.create({
+                    name: `${item.name} (${item.type})`,
+                    description: `Booking for ${item.type}`,
+                });
+                let price = await stripe.prices.create({
+                    unit_amount: item.price * 100,
+                    currency: 'CAD',
+                    product: product.id,
+                });
+                checkoutItems.push({
+                    price: price.id,
+                    quantity: 1,
+                });
+            }
+            const session = await stripe.checkout.sessions.create({
+                line_items: checkoutItems,
+                mode: 'payment',
+                success_url: `${req.protocol}://${req.get('host')}/success?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `${req.protocol}://${req.get('host')}/cancel`,
+            });
+            return res.redirect(303, session.url);
+
+        } else {
+            res.status(404).send("User not found");
+        }
     } else {
         res.redirect("/");
     }

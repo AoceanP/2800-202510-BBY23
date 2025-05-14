@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<head>
+  <title>Budget Travel</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <div id="bodycontainer">
+    <nav id="navbarPlaceholder">Trip planner</nav>
+    <div id="content">
+      <h1>Cart</h1>
+      <div id="cart-items">
+        <!-- Cart items will be dynamically inserted here -->
+      </div>
+      <form action="/checkout" method="POST">
+        <input type="submit" class="btn-teal" value="Pay with Stripe" />
+      </form><br>
+      <button id="clear-cart-button" class="btn btn-teal">Clear Cart</button>
+    </div>
+    <footer id="footerPlaceholder"></footer>
+  </div>
+  <template id="item-template">
+    <div class="cart-item" style="background-color: #f9f9f9; border: 1px solid #ccc; padding: 10px; margin: 10px;">
+      <h2 class="name"></h2>
+      <p class="type"></p>
+      <p class="price"></p>
+      <button class="remove-button">Remove</button>
+    </div>
+
+  </template>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="js/cart.js"></script>
+</body>

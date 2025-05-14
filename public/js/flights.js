@@ -16,7 +16,7 @@ searchBtn.addEventListener('click', e => {
     }).then(data => {
         const airportList = document.getElementById('flight-list');
         airportList.innerHTML = ""; // Clear previous results
-        console.log(data.data)
+        console.log(data.data);
         data.data.forEach(offer => {
             let flightOffer = flightOfferTemplate.content.cloneNode(true);
             flightOffer.querySelector('.flight-name').innerHTML = offer.source;
@@ -29,6 +29,29 @@ searchBtn.addEventListener('click', e => {
                 details += `<div class="flight-details">Amenities: ${amenity.description}</div>`;
             });
             flightOffer.querySelector('.flight-details').innerHTML = details;
+            flightOffer.querySelector('.book-button').addEventListener('click', () => {
+                fetch('/addCartItem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        { 
+                            name: offer.source,
+                            price: offer.price.total,
+                            id: offer.id,
+                            type: "flight", 
+                        }
+                    )
+                }).then(response => {
+                    return response.text();
+                }).then(data => {
+                    console.log(data);
+                    alert("Flight booked successfully!");
+                }).catch(err => {
+                    console.error(err);
+                });
+            });
             flightOfferList.appendChild(flightOffer);
         });
     }).catch(err => {
