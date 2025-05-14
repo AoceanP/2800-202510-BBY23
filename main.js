@@ -9,6 +9,9 @@ const Amadeus = require('amadeus');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const joi = require('joi');
+const genai = require('@google/genai');
+
+const aiBot = new genai.GoogleGenAI({apiKey: process.env.GENAI_API_KEY});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +28,8 @@ app.use("/js", express.static(path.join(__dirname + "/public/js")));
 const mongoStore = MongoStore.create({
     mongoUrl: mongoURI
 });
+
+app.set('view engine', 'ejs');
 
 const client = new MongoClient(mongoURI);
 client.connect();
@@ -239,9 +244,30 @@ app.get("/flights", (req, res) => {
     }
 });
 
-app.use((req, res) => {
-    res.status(404).render('404');
+app.get("/suggestions", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'suggestions.html'));
+    } else {
+        res.redirect("/");
+    }
 });
+
+app.post("/getSuggestions", async (req, res) => {
+    if (req.session.user) {
+        const response = await aiBot.models.generateContent({
+            contents: `What are some travel suggestions for a budget trip to ${req.body.location}? 
+                Please make it one paragraph long.`,
+            model: "gemini-2.5-flash-preview-04-17",
+        });
+        res.send(response.candidates[0].content.parts[0].text);
+    } else {
+        res.redirect("/");
+    }
+});
+
+// app.use((req, res) => {
+//     res.status(404).render('404');
+// });
 
 // Start server
 app.listen(PORT, () => {
