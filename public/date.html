@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hotels</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <!-- Flatpickr CSS + Confirm‑Date plugin CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.css" rel="stylesheet" />
+
+    <!-- Your custom styles -->
+    <link href="/css/style.css" rel="stylesheet" />
+</head>
+
+<body class="d-flex flex-column min-vh-100 bg-white">
+
+    <header class="border-bottom py-2">
+        <div class="container justify-content-between align-items-center">
+          <nav id="navbarPlaceholder">Dates</nav>
+        </div>
+      </header>
+
+    <main class="container py-4">
+            <div id="date-calendar"></div>
+            <div class="p-3 bg-white">
+                <button class="btn btn-teal w-100 rounded-pill py-2">Select Dates</button>
+            </div>
+        <div id="footerPlaceholder"></div>
+
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/confirmDate/confirmDate.js"></script>
+
+        <script src="js/skeleton.js"></script>
+</body>
+
+</html>
