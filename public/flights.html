@@ -21,15 +21,15 @@
     href="css/style.css" rel="stylesheet"/>
 </head>
 
-<body>
+<!-- <body>
     <h1>Flights</h1>
     <form id="flight-search-form">
         <label for="departure">Origin:</label>
-        <input type="text" id="origin" name="departure" autocomplete="airport" placeholder="Origin Airport Code"><br>
+        <input type="text" id="origin" name="departure" autocomplete="airport" placeholder="Origin Airport Code" required><br>
         <label for="arrival">Arrival:</label>
-        <input type="text" id="destination" name="arrival" placeholder="Arrival Airport Code" autocomplete="airport"><br>
+        <input type="text" id="destination" name="arrival" placeholder="Arrival Airport Code" autocomplete="airport" required><br>
         <label for="departure-date">Departure Date:</label>
-        <input type="date" id="departureDate" name="departure-date"><br>
+        <input type="date" id="departureDate" name="departure-date" required><br>
         <label for="return-date">Return Date:</label>
         <input type="date" id="return-date" name="return-date"><br>
         <button id="searchBtn">Search Flights</button>
@@ -48,7 +48,7 @@
         </div>
         <script src="/js/flights.js"></script>
        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</body>
+</body> -->
 
 <body class="d-flex flex-column min-vh-100">
     <header class="border-bottom py-2">
@@ -61,7 +61,7 @@
     <main class=" container py-4">
         <ul class="list-group">
 
-          <a href="flying_from.html" class="text-decoration-none">
+          <a href="/flying_from" class="text-decoration-none">
           <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
             <span class="material-icons text-teal me-3">place</span>
             <div class="d-flex flex-column">
@@ -71,7 +71,7 @@
           </li>
           </a>
 
-          <a href="flying_to.html" class="text-decoration-none">
+          <a href="/flying_to" class="text-decoration-none">
           <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
             <span class="material-icons text-teal me-3">place</span>
             <div class="d-flex flex-column">
@@ -81,7 +81,7 @@
           </li>
          </a>
     
-         <a href="date.html" class="text-decoration-none">
+         <a href="/date" class="text-decoration-none">
           <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
             <span class="material-icons  text-teal me-3">date_range</span>
             <div class="d-flex flex-column">
@@ -119,7 +119,8 @@
       </main>
          
   </main>
+  <script src="js/flights.js"></script>
   <div id="footerPlaceholder"></div>
-  <script src="js/skeleton.js"></script>
+  
 </body>
   </html>

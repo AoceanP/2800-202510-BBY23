@@ -23,9 +23,9 @@ const mongoURI = process.env.MONGO_URI;
 
 // Serve static files from "frontend" folder
 app.use(express.static(path.join(__dirname, 'public')))
-app.use("/img", express.static(path.join(__dirname + "/public/img")));
-app.use("/css", express.static(path.join(__dirname + "/public/css")));
-app.use("/js", express.static(path.join(__dirname + "/public/js")));
+app.use("/img", express.static(path.join(__dirname, "public/img")));
+app.use("/css", express.static(path.join(__dirname, "public/css")));
+app.use("/js", express.static(path.join(__dirname, "public/js")));
 
 const mongoStore = MongoStore.create({
     mongoUrl: mongoURI
