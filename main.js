@@ -432,9 +432,9 @@ app.post("/checkout", async (req, res) => {
     }
 });
 
-// app.use((req, res) => {
-//     res.status(404).render('404');
-// });
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
 
 // Start server
 app.listen(PORT, () => {
