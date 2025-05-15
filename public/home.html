@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Budget Travel Planner</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Google Material Icons -->
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+
+  <link href="css/style.css" rel="stylesheet"/>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+  <header class="border-bottom py-2">
+    <div class="container justify-content-between align-items-center">
+      <nav id="navbarPlaceholder">Xplor</nav>
+    </div>
+  </header>
+
+  <main class="container py-4">
+    <h3 class="fw-bold mb-4">Hi, <span id="name-goes-here">User</span></h3>
+
+    <div class="row g-3 mb-5">
+      <div class="col-4 text-center">
+        <a href="hotels.html" class="action-card text-decoration-none text-teal d-block p-3">
+          <span class="material-icons">hotel</span>
+          <div>Hotels</div>
+        </a>
+      </div>
+      <div class="col-4 text-center">
+        <a href="flights.html" class="action-card text-decoration-none text-teal d-block p-3">
+          <span class="material-icons">flight</span>
+          <div>Flights</div>
+        </a>
+      </div>
+      <div class="col-4 text-center">
+        <a href="cars.html" class="action-card text-decoration-none text-teal d-block p-3">
+          <span class="material-icons">directions_car</span>
+          <div>Cars</div>
+        </a>
+      </div>
+      <div class="col-6 text-center">
+        <a href="packages.html" class="action-card text-decoration-none text-teal d-block p-3">
+          <span class="material-icons">beach_access</span>
+          <div>Packages</div>
+        </a>
+      </div>
+      <div class="col-6 text-center">
+        <a href="activities.html" class="action-card text-decoration-none text-teal d-block p-3">
+          <span class="material-icons">event</span>
+          <div>Activities</div>
+        </a>
+      </div>
+    </div>
+
+    <p>Explore from <span id="place-goes-here">Your Location</span></p>
+  </main>
+  <div id="footerPlaceholder"></div>
+
+  <script src="js/skeleton.js"></script>
+</body>
+</html>
+

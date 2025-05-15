@@ -3,9 +3,15 @@ const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const { MongoClient } = require('mongodb');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const Amadeus = require('amadeus');
 const path = require('path');
 const bcrypt = require('bcrypt');
 const joi = require('joi');
+const genai = require('@google/genai');
+
+const aiBot = new genai.GoogleGenAI({apiKey: process.env.GENAI_API_KEY});
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,6 +21,7 @@ const saltRounds = 12;
 const mongoURI = process.env.MONGO_URI;
 
 // Serve static files from "frontend" folder
+app.use(express.static(path.join(__dirname, 'public')))
 app.use("/img", express.static(path.join(__dirname + "/public/img")));
 app.use("/css", express.static(path.join(__dirname + "/public/css")));
 app.use("/js", express.static(path.join(__dirname + "/public/js")));
@@ -22,6 +29,8 @@ app.use("/js", express.static(path.join(__dirname + "/public/js")));
 const mongoStore = MongoStore.create({
     mongoUrl: mongoURI
 });
+
+app.set('view engine', 'ejs');
 
 const client = new MongoClient(mongoURI);
 client.connect();
@@ -35,7 +44,96 @@ app.use(session({
     secret: process.env.SESSION_SECRET
 }));
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST"],
+    credentials: true
+}));
 
+// Initialize Amadeus API client
+const amadeus = new Amadeus({
+    clientId: process.env.AMADEUS_CLIENT_ID,
+    clientSecret: process.env.AMADEUS_CLIENT_SECRET
+});
+
+app.get("/flight-search", (req, res) => {
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+    const originCode = req.query.originCode;
+    const destinationCode = req.query.destinationCode;
+    const departureDate = req.query.departureDate;
+    amadeus.shopping.flightOffersSearch.get({
+        originLocationCode: originCode,
+        destinationLocationCode: destinationCode,
+        departureDate: departureDate,
+        adults: 1,
+        max: '5',
+        currencyCode: "CAD"
+    }).then(response => {
+        res.send(response.result);
+    }).catch(err => {
+        console.error(err);
+        res.status(500).send("Error fetching data from Amadeus API");
+    });
+});
+
+app.post("/flight-confirmation", (req, res) => {
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+    const flight = req.body.flight;
+    amadeus.shopping.flightOffers.pricing.post(
+        JSON.stringify({
+            'data': {
+                'type': 'flight-offers-pricing',
+                'flightOffers': [flight],
+            }
+        })
+    ).then(response => {
+        res.send(response.result);
+    }).catch(err => {
+        res.send(err);
+    });
+});
+
+app.post("/flight-booking", (req, res) => {
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
+    const flight = req.body.flight;
+    const documents = req.body.documents;
+    amadeus.booking.flightOrders.post(
+        JSON.stringify({
+            'data': {
+                'type': 'flight-order',
+                'flightOffers': [flight],
+                'travelers': [{
+                    "id": "1",
+                    "dateOfBirth": "1982-01-16",
+                    "name": req.session.user.name,
+                    "contact": {
+                        "emailAddress": req.session.user.email,
+                        "phones": [{
+                            "deviceType": "MOBILE",
+                            "countryCallingCode": "34",
+                            "number": "480080076"
+                        }]
+                    },
+                    "documents": documents
+                }]
+            }
+        })
+    ).then(response => {
+        res.send(response.result);
+    }).catch(err => {
+        res.send(err);
+    });
+});
 // Default route - send index.html if user visits "/"
 app.get('/', (req, res) => {
     if (req.session.user) {
@@ -63,7 +161,6 @@ app.post('/loginUser', (req, res) => {
         res.redirect("/login");
     } else {
         users.findOne({ email: req.body.email }).then(user => {
-            console.log(user);
             if (!user) {
                 res.redirect("/signup");
             } else if (bcrypt.compareSync(req.body.password, user.password)) {
@@ -77,10 +174,21 @@ app.post('/loginUser', (req, res) => {
 
 app.get("/planner", (req, res) => {
     if (req.session.user) {
-        res.send("Hello " + req.session.user.name);
+        res.sendFile(path.join(__dirname, 'public', 'home.html'))
     } else {
         res.redirect("/");
     }
+});
+
+app.get("/logout", (req, res) => {
+    req.session.destroy(err => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error logging out");
+        } else {
+            res.redirect("/login");
+        }
+    });
 });
 
 app.get('/signup', (req, res) => {
@@ -88,6 +196,14 @@ app.get('/signup', (req, res) => {
         res.redirect("/planner");
     } else {
         res.sendFile(path.join(__dirname, 'public', 'signup.html'));
+    }
+});
+
+app.get('/transit', (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'transit.html'));
+    } else {
+        res.redirect("/login");
     }
 });
 
@@ -103,7 +219,7 @@ app.post('/signupUser', async (req, res) => {
     if (query.error) {
         res.redirect("/signup");
     } else {
-        
+
         if (await users.findOne({ email: req.body.email })) {
             res.redirect("/login");
         } else {
@@ -120,6 +236,39 @@ app.post('/signupUser', async (req, res) => {
         }
     }
 });
+
+app.get("/flights", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'flights.html'));
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/suggestions", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'suggestions.html'));
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.post("/getSuggestions", async (req, res) => {
+    if (req.session.user) {
+        const response = await aiBot.models.generateContent({
+            contents: `What are some travel suggestions for a budget trip to ${req.body.location}? 
+                Please make it one paragraph long.`,
+            model: "gemini-2.5-flash-preview-04-17",
+        });
+        res.send(response.candidates[0].content.parts[0].text);
+    } else {
+        res.redirect("/");
+    }
+});
+
+// app.use((req, res) => {
+//     res.status(404).render('404');
+// });
 
 // Start server
 app.listen(PORT, () => {
