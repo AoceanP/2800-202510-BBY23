@@ -22,6 +22,7 @@ const saltRounds = 12;
 const mongoURI = process.env.MONGO_URI;
 
 // Serve static files from "frontend" folder
+app.use(express.static(path.join(__dirname, 'public')))
 app.use("/img", express.static(path.join(__dirname + "/public/img")));
 app.use("/css", express.static(path.join(__dirname + "/public/css")));
 app.use("/js", express.static(path.join(__dirname + "/public/js")));
@@ -175,7 +176,7 @@ app.post('/loginUser', (req, res) => {
 
 app.get("/planner", (req, res) => {
     if (req.session.user) {
-        res.sendFile(path.join(__dirname, 'public', 'planner.html'));
+        res.sendFile(path.join(__dirname, 'public', 'home.html'))
     } else {
         res.redirect("/");
     }
