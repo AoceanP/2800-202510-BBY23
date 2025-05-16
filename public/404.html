@@ -2,26 +2,42 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>404 - Page Not Found</title>
-  <link rel="stylesheet" href="css/snake.css">
-</head>
-<body>
-  <h1>404: Page Not Found</h1>
-  <p><h2>Lost in the Sauce? Play some Snake while you're here.</h2></p>
 
-  <div id="container">
-    <div id="gameWrapper">
-      <canvas id="game" width="750" height="750"></canvas>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-      <div id="gameOverCard" class="hidden">
-        <h2>Game Over</h2>
-        <p>You hit the wall.</p>
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/snake.css">
+  <link href="/css/style.css" rel="stylesheet" />
+
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+
+  <main class="container py-4 text-center">
+    <h1 class="fw-bold mb-3">404: Page Not Found</h1>
+    <h2 class="mb-4">Lost in the Sauce? Play some Snake while you're here.</h2>
+
+    <div id="container">
+      <div id="gameWrapper">
+        <canvas id="game" width="750" height="750"></canvas>
+
+        <div id="gameOverCard" class="hidden">
+          <h2>Game Over</h2>
+          <p>You hit the wall or yourself.</p>
+        </div>
       </div>
+
+      <button id="startBtn" class="btn btn-primary mt-3">Start Game</button>
+      <a href="/planner" class="btn btn-secondary mt-3 ms-2">Return to Home</a>
     </div>
+  </main>
 
-    <button id="startBtn">Start Game</button>
-  </div>
-
-  <script src="snake.js"></script>
-</body>
+  <script src="/js/snake.js"></script>
 </html>
