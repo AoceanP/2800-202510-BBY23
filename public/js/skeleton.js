@@ -28,4 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error loading footer.html:', error));
 
+        window.goBack = function() {
+            window.location.href = '/planner';
+        };
 });
