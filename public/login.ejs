@@ -7,14 +7,18 @@
 <body>
   <div class="welcome-page">
     <div class="welcome-content">
-    <img class="logo" src="/img/logoname.png"> 
+      <img class="logo" src="/img/logoname.png"> 
       <p class="motto">See the world with <br> your itinerary in hand</p>
+      <% if (error) { %>
+        <p class="error" style="color: red; text-align: center;"><%= error %></p>
+      <% } %>
       <div class="button-group">
         <form action="/loginUser" method="post" class="login_form">
             <input class="email" type="text" name="email" placeholder="Email">
             <input class="password" type="password" name="password" placeholder="Password">
             <button type="submit" class="btn-teal">Login</button>
         </form>
+        <a href="/signup"><button class="btn-teal">Go To Sign Up</button></a>
       </div>
     </div>
   </div>

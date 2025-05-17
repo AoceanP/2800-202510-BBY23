@@ -1,20 +1,51 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Get Suggestions</title>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="/css/style.css">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Get Travel Suggestions</title>
+
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <!-- Google Material Icons -->
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+
+  <!-- Optional custom styles -->
+  <link href="/css/style.css" rel="stylesheet"/>
 </head>
-<body>
-    <div class="suggestions-page">
-        <div class="suggestions-content">
-        <h1>Get Travel Suggestions</h1>
-        <form id="suggestion-form" action="/getSuggestions" method="POST">
-            <label for="location">Enter a location:</label>
-            <input type="text" id="location" name="location" required>
-            <button type="submit">Get Suggestions</button>
-        </form>
-        <div id="suggestions"></div>
+<body class="bg-light">
+
+  <main class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h1 class="card-title text-center mb-4 fw-bold">Get Travel Suggestions</h1>
+            <form id="suggestion-form" action="/getSuggestions" method="POST">
+              <div class="mb-3">
+                <label for="location" class="form-label">Enter a location</label>
+                <input type="text" id="location" name="location" class="form-control" placeholder="e.g. Paris, Tokyo…" required/>
+              </div>
+              <button type="submit" class="btn btn-teal w-100">
+                <span class="material-icons align-middle me-2">search</span>Get Suggestions</button>
+            </form>
+            <div id="suggestions" class="mt-4"></div>
+          </div>
         </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap JS bundle (optional, if you need dropdowns or modals) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Your suggestions logic -->
   <script src="/js/suggestions.js"></script>
 </body>
 </html>

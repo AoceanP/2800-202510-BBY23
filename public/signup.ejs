@@ -9,15 +9,19 @@
     <div class="welcome-content">
       <img class="logo" src="/img/logoname.png">
       <p class="motto">See the world with <br> your itinerary in hand</p>
+      <% if (error) { %>
+        <p class="error" style="color: red; text-align: center;"><%= error %></p>
+      <% } %>
       <div class="signup-button-group">
         <form action="/signupUser" method="post" class="signup_form">
-          <input class="signup" type="text"  name="name"     placeholder="Name">
-          <input class="signup" type="text"  name="username"  placeholder="Username">
-          <input class="signup" type="text"  name="email"      placeholder="Email">
-          <input class="signup" type="password" name="password"  placeholder="Password">
+          <input class="signup" type="text" name="name" placeholder="Name">
+          <input class="signup" type="text" name="username" placeholder="Username">
+          <input class="signup" type="text" name="email" placeholder="Email">
+          <input class="signup" type="password" name="password" placeholder="Password">
           <input class="signup" type="password" name="password2" placeholder="Confirm Password">
-          <button  type="submit" class="btn-teal">Sign Up</button>
+          <button type="submit" class="btn-teal">Sign Up</button>
         </form>
+        <a href="/login"><button class="btn-teal">Go To Login</button></a>
       </div>
     </div>
   </div>
