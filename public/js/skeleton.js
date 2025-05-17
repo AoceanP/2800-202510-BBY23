@@ -28,18 +28,4 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error loading footer.html:', error));
 
-    if (document.querySelector("#date-calendar")) {
-        const fp = flatpickr("#date-calendar", {
-            inline: true,
-            mode: "range",
-            minDate: "today",
-            showMonths: 4,
-            dateFormat: "D M j",
-            locale: { firstDayOfWeek: 0 },
-        });
-    }
-
-    window.goBack = function() {
-        window.location.href = '/planner';
-    };
 });
