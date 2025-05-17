@@ -140,3 +140,7 @@ html, body {
 .text-teal {
   color: #008080 !important;
 }
+
+.pb-6{
+  padding-bottom: 6rem !important;
+}
