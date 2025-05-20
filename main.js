@@ -21,8 +21,8 @@ const saltRounds = 12;
 // Load URI from .env
 const mongoURI = process.env.MONGO_URI;
 
-// Serve static files from "frontend" folder
-app.use(express.static(path.join(__dirname, 'public')))
+// Serve static files from "public" folder
+app.use(express.static(path.join(__dirname, 'public')));
 app.use("/img", express.static(path.join(__dirname, "public/img")));
 app.use("/css", express.static(path.join(__dirname, "public/css")));
 app.use("/js", express.static(path.join(__dirname, "public/js")));
@@ -32,9 +32,9 @@ const mongoStore = MongoStore.create({
 });
 
 app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'public'));
 
 const client = new MongoClient(mongoURI);
-client.connect();
 const db = client.db("travelplanner");
 const users = db.collection("users");
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
@@ -77,7 +77,7 @@ app.get("/flight-search", (req, res) => {
     }).then(response => {
         res.send(response.result);
     }).catch(err => {
-        console.error(err);
+        console.error('Flight search error:', err);
         res.status(500).send("Error fetching data from Amadeus API");
     });
 });
@@ -98,7 +98,8 @@ app.post("/flight-confirmation", (req, res) => {
     ).then(response => {
         res.send(response.result);
     }).catch(err => {
-        res.send(err);
+        console.error('Flight confirmation error:', err);
+        res.status(500).send("Error confirming flight");
     });
 });
 
@@ -133,10 +134,12 @@ app.post("/flight-booking", (req, res) => {
     ).then(response => {
         res.send(response.result);
     }).catch(err => {
-        res.send(err);
+        console.error('Flight booking error:', err);
+        res.status(500).send("Error booking flight");
     });
 });
-// Default route - send index.html if user visits "/"
+
+// Default route
 app.get('/', (req, res) => {
     if (req.session.user) {
         res.redirect("/planner");
@@ -149,34 +152,47 @@ app.get('/login', (req, res) => {
     if (req.session.user) {
         res.redirect("/planner");
     } else {
-        res.sendFile(path.join(__dirname, 'public', 'login.html'));
+        res.render('login', { error: req.session.error || null });
+        req.session.error = null;
     }
 });
 
-app.post('/loginUser', (req, res) => {
+app.post('/loginUser', async (req, res) => {
     const schema = joi.object({
-        email: joi.string().required().email(),
-        password: joi.string().required().min(5).max(20)
+        email: joi.string().required().email().messages({
+            'string.email': 'Email or password doesn\'t match.',
+            'any.required': 'Email or password doesn\'t match.'
+        }),
+        password: joi.string().required().min(5).max(20).messages({
+            'string.min': 'Email or password doesn\'t match.',
+            'string.max': 'Email or password doesn\'t match.',
+            'any.required': 'Email or password doesn\'t match.'
+        })
     });
-    let query = schema.validate(req.body);
-    if (query.error) {
+    const { error } = schema.validate(req.body);
+    if (error) {
+        req.session.error = error.details[0].message;
+        return res.redirect("/login");
+    }
+    try {
+        const user = await users.findOne({ email: req.body.email });
+        if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
+            req.session.error = "Email or password doesn't match.";
+            return res.redirect("/login");
+        }
+        user.password = "";
+        req.session.user = user;
+        res.redirect("/planner");
+    } catch (err) {
+        console.error('Login error:', err);
+        req.session.error = "Server error. Please try again later.";
         res.redirect("/login");
-    } else {
-        users.findOne({ email: req.body.email }).then(user => {
-            if (!user) {
-                res.redirect("/signup");
-            } else if (bcrypt.compareSync(req.body.password, user.password)) {
-                user.password = "";
-                req.session.user = user;
-                res.redirect("/planner");
-            }
-        });
     }
 });
 
 app.get("/planner", (req, res) => {
     if (req.session.user) {
-        res.sendFile(path.join(__dirname, 'public', 'home.html'))
+        res.sendFile(path.join(__dirname, 'public', 'home.html'));
     } else {
         res.redirect("/");
     }
@@ -185,7 +201,7 @@ app.get("/planner", (req, res) => {
 app.get("/logout", (req, res) => {
     req.session.destroy(err => {
         if (err) {
-            console.error(err);
+            console.error('Logout error:', err);
             res.status(500).send("Error logging out");
         } else {
             res.redirect("/login");
@@ -197,45 +213,61 @@ app.get('/signup', (req, res) => {
     if (req.session.user) {
         res.redirect("/planner");
     } else {
-        res.sendFile(path.join(__dirname, 'public', 'signup.html'));
-    }
-});
-
-app.get('/transit', (req, res) => {
-    if (req.session.user) {
-        res.sendFile(path.join(__dirname, 'public', 'transit.html'));
-    } else {
-        res.redirect("/login");
+        res.render('signup', { error: req.session.error || null });
+        req.session.error = null;
     }
 });
 
 app.post('/signupUser', async (req, res) => {
     const schema = joi.object({
-        email: joi.string().required().email(),
-        username: joi.string().required(),
-        name: joi.string().required(),
-        password: joi.string().required().min(5).max(20),
-        password2: joi.string().required().valid(password)
+        email: joi.string().required().email().messages({
+            'string.email': 'Please enter a valid email.',
+            'any.required': 'Email is required.'
+        }),
+        username: joi.string().required().messages({
+            'any.required': 'Username is required.'
+        }),
+        name: joi.string().required().messages({
+            'any.required': 'Name is required.'
+        }),
+        password: joi.string().required().min(5).max(20).messages({
+            'string.min': 'Password must be at least 5 characters.',
+            'string.max': 'Password cannot exceed 20 characters.',
+            'any.required': 'Password is required.'
+        }),
+        password2: joi.string().required().min(5).max(20).messages({
+            'any.required': 'Confirm password is required.'
+        })
     });
-    let query = schema.validate(req.body);
-    if (query.error) {
-        res.redirect("/signup");
-    } else {
-
-        if (await users.findOne({ email: req.body.email })) {
-            res.redirect("/login");
-        } else {
-            let newUser = {
-                email: req.body.email,
-                username: req.body.username,
-                name: req.body.name,
-                password: await bcrypt.hash(req.body.password, saltRounds)
-            };
-            await users.insertOne(newUser);
-            newUser.password = "";
-            req.session.user = newUser;
-            res.redirect("/planner");
+    const { error } = schema.validate(req.body);
+    if (error) {
+        req.session.error = error.details[0].message;
+        return res.redirect("/signup");
+    }
+    if (req.body.password !== req.body.password2) {
+        req.session.error = "Passwords do not match.";
+        return res.redirect("/signup");
+    }
+    try {
+        const existingUser = await users.findOne({ email: req.body.email });
+        if (existingUser) {
+            req.session.error = "Email already exists.";
+            return res.redirect("/login");
         }
+        const newUser = {
+            email: req.body.email,
+            username: req.body.username,
+            name: req.body.name,
+            password: await bcrypt.hash(req.body.password, saltRounds)
+        };
+        await users.insertOne(newUser);
+        newUser.password = "";
+        req.session.user = newUser;
+        res.redirect("/planner");
+    } catch (err) {
+        console.error('Signup error:', err);
+        req.session.error = "Server error. Please try again later.";
+        res.redirect("/signup");
     }
 });
 
@@ -255,14 +287,51 @@ app.get("/suggestions", (req, res) => {
     }
 });
 
+app.get("/activities", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'activities.html'));
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/cars", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'cars.html'));
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/packages", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'packages.html'));
+    } else {
+        res.redirect("/");
+    }
+});
+
+app.get("/hotels", (req, res) => {
+    if (req.session.user) {
+        res.sendFile(path.join(__dirname, 'public', 'hotels.html'));
+    } else {
+        res.redirect("/");
+    }
+});
+
 app.post("/getSuggestions", async (req, res) => {
     if (req.session.user) {
-        const response = await aiBot.models.generateContent({
-            contents: `What are some travel suggestions for a budget trip to ${req.body.location}? 
-                Please make it one paragraph long.`,
-            model: "gemini-2.5-flash-preview-04-17",
-        });
-        res.send(response.candidates[0].content.parts[0].text);
+        try {
+            const response = await aiBot.models.generateContent({
+                contents: `What are some travel suggestions for a budget trip to ${req.body.location}? 
+                    Please make it one paragraph long.`,
+                model: "gemini-2.5-flash-preview-04-17",
+            });
+            res.send(response.candidates[0].content.parts[0].text);
+        } catch (err) {
+            console.error('Suggestions error:', err);
+            res.status(500).send("Error fetching suggestions");
+        }
     } else {
         res.redirect("/");
     }
@@ -492,3 +561,77 @@ app.use((req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
+
+app.post('/hotels', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/hotels');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/flights', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/flights');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/cars', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/cars');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/packages', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/packages');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/activities', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/activities');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.post('/home', (req, res) => {
+    if (req.session.user) {
+        res.redirect('/planner');
+    } else {
+        res.redirect('/login');
+    }
+});
+
+app.use((req, res) => {
+    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
+});
+
+async function startServer() {
+    try {
+        await client.connect();
+        console.log('Connected to MongoDB');
+        const server = app.listen(PORT, () => {
+            console.log(`Server is running at http://localhost:${PORT}`);
+        });
+        process.on('SIGTERM', async () => {
+            console.log('SIGTERM received. Closing server...');
+            server.close();
+            await client.close();
+            console.log('MongoDB connection closed.');
+            process.exit(0);
+        });
+    } catch (err) {
+        console.error('Failed to connect to MongoDB:', err);
+        process.exit(1);
+    }
+}
+
+startServer();

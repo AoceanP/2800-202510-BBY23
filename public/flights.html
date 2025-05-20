@@ -17,110 +17,104 @@
     rel="stylesheet"
   />
 
-  <link 
-    href="css/style.css" rel="stylesheet"/>
+  <!-- Your custom styles -->
+  <link href="css/style.css" rel="stylesheet"/>
 </head>
 
-<!-- <body>
-    <h1>Flights</h1>
+<body class="d-flex flex-column min-vh-100 bg-light">
+
+
+  <header class="border-bottom py-2 bg-white fixed-top">
+    <div class="container justify-content-between align-items-center">
+      <nav id="navbarPlaceholder">Flights</nav>
+    </div>
+  </header>
+
+  <main class="flex-grow-1 container mt-4 pb-6 pt-5">
     <form id="flight-search-form">
-        <label for="departure">Origin:</label>
-        <input type="text" id="origin" name="departure" autocomplete="airport" placeholder="Origin Airport Code" required><br>
-        <label for="arrival">Arrival:</label>
-        <input type="text" id="destination" name="arrival" placeholder="Arrival Airport Code" autocomplete="airport" required><br>
-        <label for="departure-date">Departure Date:</label>
-        <input type="date" id="departureDate" name="departure-date" required><br>
-        <label for="return-date">Return Date:</label>
-        <input type="date" id="return-date" name="return-date"><br>
-        <button id="searchBtn">Search Flights</button>
-    </form>
-    <div id="flight-list"></div>
-    <button onclick="window.location.href='/planner'" class="btn-teal">Go to Planner</button>
-    <button onclick="window.location.href='/cart'" class="btn-teal">Go to Cart</button>
-    <template id="flight-template">
-        <div class="flight-item" style="background-color: #f9f9f9; border: 1px solid #ccc; padding: 10px; margin: 10px;">
-            <h2 class="flight-name"></h2>
-            <p class="flight-price"></p>
-            <ul class="flight-details">
-               
-            </ul>
-            <button class="book-button">Book</button>
-        </div>
-        <script src="/js/flights.js"></script>
-       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</body> -->
+      <ul class="list-group gap-3">
 
-<body class="d-flex flex-column min-vh-100">
-    <header class="border-bottom py-2">
-        <div class="container justify-content-between align-items-center">
-          <nav id="navbarPlaceholder">Flights</nav>
-        </div>
-      </header>
-
-  <main class="flex-grow-1 container pb-5">
-    <main class=" container py-4">
-        <ul class="list-group">
-
-          <a href="/flying_from" class="text-decoration-none">
-          <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
-            <span class="material-icons text-teal me-3">place</span>
-            <div class="d-flex flex-column">
-              <span class="fw-semibold">Flying From</span>
-              <small class="text-muted">Select a city</small>
-            </div>
-          </li>
-          </a>
-
-          <a href="/flying_to" class="text-decoration-none">
-          <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
-            <span class="material-icons text-teal me-3">place</span>
-            <div class="d-flex flex-column">
-              <span class="fw-semibold">Flying To</span>
-              <small class="text-muted">Select a city</small>
-            </div>
-          </li>
-         </a>
-    
-         <a href="/date" class="text-decoration-none">
-          <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
-            <span class="material-icons  text-teal me-3">date_range</span>
-            <div class="d-flex flex-column">
-              <span class="fw-semibold">Dates</span>
-              <small class="text-muted">Choose travel dates</small>
-            </div>
-          </li>
-        </a>
-
-          <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
-            <span class="material-icons text-teal me-3">person</span>
-            <div class="d-flex flex-column">
-              <span class="fw-semibold">Travellers</span>
-              <small class="text-muted">Number of Travellers</small>
-            </div>
-          </li>
-
-          <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
-            <span class="material-icons text-teal me-3">airline_seat_recline_normal</span>
-            <div class="d-flex flex-column">
-              <span class="fw-semibold">Class</span>
-              <small class="text-muted">Business Class</small>
-            </div>
-          </li>
-        </ul>
-
-        <div class="bg-white p-3">
-            <div class="container">
-              <button id="searchBtn" type="button" class="btn btn-teal w-100 rounded-pill py-2">
-                Search
-              </button>
-            </div>
+        <!-- Origin -->
+        <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
+          <span class="material-icons text-teal me-3">place</span>
+          <div class="flex-grow-1">
+            <label for="origin" class="fw-semibold mb-1 d-block">Flying From</label>
+            <input type="text"
+                   id="origin"
+                   name="departure"
+                   class="form-control form-control-sm border-0 p-0 bg-transparent"
+                   placeholder="Enter airport code"
+                   autocomplete="airport">
           </div>
-        
-      </main>
-         
+        </li>
+
+        <!-- Destination -->
+        <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
+          <span class="material-icons text-teal me-3">place</span>
+          <div class="flex-grow-1">
+            <label for="destination" class="fw-semibold mb-1 d-block">Flying To</label>
+            <input type="text"
+                   id="destination"
+                   name="arrival"
+                   class="form-control form-control-sm border-0 p-0 bg-transparent"
+                   placeholder="Enter airport code"
+                   autocomplete="city">
+          </div>
+        </li>
+
+        <!-- Departure Date -->
+        <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
+          <span class="material-icons text-teal me-3">calendar_today</span>
+          <div class="flex-grow-1">
+            <label for="departureDate" class="fw-semibold mb-1 d-block">Departure Date</label>
+            <input type="date"
+                   id="departureDate"
+                   name="departure-date"
+                   class="form-control form-control-sm border-0 p-0 bg-transparent">
+          </div>
+        </li>
+
+        <!-- Return Date -->
+        <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
+          <span class="material-icons text-teal me-3">calendar_today</span>
+          <div class="flex-grow-1">
+            <label for="returnDate" class="fw-semibold mb-1 d-block">Return Date</label>
+            <input type="date"
+                   id="returnDate"
+                   name="return-date"
+                   class="form-control form-control-sm border-0 p-0 bg-transparent">
+          </div>
+        </li>
+
+      </ul>
+
+      <div class="mt-4">
+        <button type="submit"
+                id="searchBtn"
+                class="btn btn-teal w-100 rounded-pill py-2">
+          Search
+        </button>
+      </div>
+    </form>
+
+    <div id="flight-list" class="mt-5"></div>
+
+    <template id="flight-template">
+      <div class="flight-item bg-white border rounded p-3 mb-3">
+        <h2 class="h5 flight-name"></h2>
+        <p class="flight-price"></p>
+        <ul class="flight-details ps-3"></ul>
+        <button class="btn btn-teal book-button">Book</button>
+      </div>
+    </template>
   </main>
   <script src="js/flights.js"></script>
   <div id="footerPlaceholder"></div>
   
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <script src="js/flights.js"></script>
 </body>
-  </html>
+</html>
+

@@ -15,13 +15,9 @@ and I think it's a fun way to have a 404 screen. This was a challenge for me, bu
 @author Aleksandar
 */
 window.addEventListener("DOMContentLoaded", () => {
-
   const canvas = document.getElementById("game");
-
   const ctx = canvas.getContext("2d");
-
   const startBtn = document.getElementById("startBtn");
-
   const gameOverCard = document.getElementById("gameOverCard");
 
   const BLOCK_SIZE = 30;
@@ -30,37 +26,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
   let snake = [];
   let food = {};
-  //direction x axis
   let dx = 1;
-  //direction y axis
   let dy = 0;
   let gameLoop = null;
+  let nextDx = 1;
+  let nextDy = 0;
 
   function drawBlock(x, y, color) {
-
     ctx.fillStyle = color;
     ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-
   }
 
   function clearCanvas() {
-
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
   }
 
   function drawGrid() {
-
     ctx.strokeStyle = "#dddddd";
-
     for (let i = 0; i <= canvas.width; i += BLOCK_SIZE) {
       ctx.beginPath();
       ctx.moveTo(i, 0);
       ctx.lineTo(i, canvas.height);
       ctx.stroke();
     }
-
     for (let j = 0; j <= canvas.height; j += BLOCK_SIZE) {
       ctx.beginPath();
       ctx.moveTo(0, j);
@@ -74,6 +63,12 @@ window.addEventListener("DOMContentLoaded", () => {
       x: Math.floor(Math.random() * GAME_SIZE),
       y: Math.floor(Math.random() * GAME_SIZE)
     };
+    for (let segment of snake) {
+      if (food.x === segment.x && food.y === segment.y) {
+        placeFood();
+        break;
+      }
+    }
   }
 
   function draw() {
@@ -86,19 +81,19 @@ window.addEventListener("DOMContentLoaded", () => {
     drawBlock(snake[0].x, snake[0].y, "#016901");
   }
 
- function moveSnake() {
+  function moveSnake() {
+    dx = nextDx;
+    dy = nextDy;
 
-  const moves = [{ dx, dy }];
-
-  for (let i = 0; i < moves.length; i++) {
     const head = {
-      x: snake[0].x + moves[i].dx,
-      y: snake[0].y + moves[i].dy
+      x: snake[0].x + dx,
+      y: snake[0].y + dy
     };
 
     if (
       head.x < 0 || head.x >= GAME_SIZE ||
-      head.y < 0 || head.y >= GAME_SIZE
+      head.y < 0 || head.y >= GAME_SIZE ||
+      snake.some(segment => segment.x === head.x && segment.y === head.y)
     ) {
       endGame();
       return;
@@ -112,8 +107,6 @@ window.addEventListener("DOMContentLoaded", () => {
       snake.pop();
     }
   }
-}
-
 
   function gameStep() {
     moveSnake();
@@ -121,60 +114,57 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function resetGame() {
-    snake = [
-      { x: 5, y: 5 }
-    ];
-    
+    snake = [{ x: 5, y: 5 }];
     dx = 1;
     dy = 0;
+    nextDx = 1;
+    nextDy = 0;
     placeFood();
     draw();
   }
 
   function endGame() {
-
     clearInterval(gameLoop);
-
     gameOverCard.classList.remove("hidden");
   }
 
-document.addEventListener("keydown", (e) => {
-  switch (e.key) {
-    case "ArrowUp":
-      if (dy === 0) {
-        dx = 0;
-        dy = -1;
-      }
-      break;
-    case "ArrowDown":
-      if (dy === 0) {
-        dx = 0;
-        dy = 1;
-      }
-      break;
-    case "ArrowLeft":
-      if (dx === 0) {
-        dx = -1;
-        dy = 0;
-      }
-      break;
-    case "ArrowRight":
-      if (dx === 0) {
-        dx = 1;
-        dy = 0;
-      }
-      break;
-  }
-});
+  document.addEventListener("keydown", (e) => {
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+      e.preventDefault();
+    }
+
+    switch (e.key) {
+      case "ArrowUp":
+        if (nextDy === 0) {
+          nextDx = 0;
+          nextDy = -1;
+        }
+        break;
+      case "ArrowDown":
+        if (nextDy === 0) {
+          nextDx = 0;
+          nextDy = 1;
+        }
+        break;
+      case "ArrowLeft":
+        if (nextDx === 0) {
+          nextDx = -1;
+          nextDy = 0;
+        }
+        break;
+      case "ArrowRight":
+        if (nextDx === 0) {
+          nextDx = 1;
+          nextDy = 0;
+        }
+        break;
+    }
+  });
 
   startBtn.addEventListener("click", () => {
-
     if (gameLoop) clearInterval(gameLoop);
-
     gameOverCard.classList.add("hidden");
-
     resetGame();
-    
     gameLoop = setInterval(gameStep, 1000 / FPS);
   });
 });
