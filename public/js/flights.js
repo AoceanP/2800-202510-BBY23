@@ -1,11 +1,13 @@
 const searchBtn = document.getElementById('searchBtn');
 const flightOfferTemplate = document.getElementById('flight-template');
 const flightOfferList = document.getElementById('flight-list');
+const departureDateInput = document.getElementById('departureDate');
+departureDateInput.min = new Date().toISOString().split("T")[0];
 searchBtn.addEventListener('click', e => {
     e.preventDefault();
     const origin = document.getElementById('origin').value;
     const destination = document.getElementById('destination').value;
-    const departureDate = document.getElementById('departureDate').value;
+    const departureDate = departureDateInput.value;
     fetch(`/flight-search?originCode=${origin}&destinationCode=${destination}&departureDate=${departureDate}`, {
         method: "GET",
         headers: {

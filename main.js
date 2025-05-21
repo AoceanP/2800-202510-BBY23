@@ -422,15 +422,15 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
 app.post("/clearCart", (req, res) => {
     if (req.session.user) {
         users.updateOne(
-        { email: req.session.user.email },
-        { $set: { cart: [] } }
-    ).then(() => {
-        console.log("Cart cleared");
-        res.send("Cart cleared");
-    }).catch(err => {
-        console.error(err);
-        res.status(500).send("Error clearing cart");
-    });
+            { email: req.session.user.email },
+            { $set: { cart: [] } }
+        ).then(() => {
+            console.log("Cart cleared");
+            res.send("Cart cleared");
+        }).catch(err => {
+            console.error(err);
+            res.status(500).send("Error clearing cart");
+        });
     } else {
         res.redirect("/");
     }
@@ -510,41 +510,42 @@ app.get("/cars", (req, res) => {
 });
 
 app.post("/car-search", (req, res) => {
-    if (!req.session.user) {
-        res.status(401).send("Unauthorized");
-        return;
-    }
+    // if (!req.session.user) {
+    //     res.status(401).send("Unauthorized");
+    //     return;
+    // }
+    console.log(req.body);
     const schema = joi.object({
         startLocationCode: joi.string().required(),
         endAddressLine: joi.string().required(),
         endCityName: joi.string().required(),
-        geoCode: joi.string().required(),
+        endGeoCode: joi.string().required(),
         startDateTime: joi.date().required(),
-        passengers: joi.number().required(),
+        passengers: joi.number().min(1).max(10).required(),
     });
-    const geoCode = `${req.body.latitude},${req.body.longitude}`;
     const startDateTime = new Date(req.body.startDateTime);
-    const {endCityName, endAddressLine, passengers} = req.body;
+    const { endCityName, endAddressLine, passengers, endGeoCode, startLocationCode } = req.body;
     let query = schema.validate({
-        startLocationCode: req.body.startLocationCode,
-        endAddressLine: endAddressLine,
-        endCityName: endCityName,
-        geoCode: geoCode,
-        startDateTime: startDateTime,
-        passengers: passengers
+        startLocationCode,
+        endAddressLine,
+        endCityName,
+        endGeoCode,
+        startDateTime,
+        passengers,
     });
     if (query.error) {
+        console.log("Invalid Data");
         res.status(400).send("Invalid data");
         return;
     }
 
     amadeus.shopping.transferOffers.post({
-        startLocationCode: req.body.startLocationCode,
-        endAddressLine: endAddressLine,
-        endCityName: endCityName,
-        geoCode: geoCode,
-        startDateTime: startDateTime,
-        passengers: passengers
+        startLocationCode,
+        endAddressLine,
+        endCityName,
+        endGeoCode,
+        startDateTime,
+        passengers
     }).then(response => {
         res.send(response.result);
     }).catch(err => {
@@ -555,11 +556,6 @@ app.post("/car-search", (req, res) => {
 
 app.use((req, res) => {
     res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-});
-
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
 });
 
 app.post('/hotels', (req, res) => {

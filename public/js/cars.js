@@ -1,24 +1,44 @@
 const searchBtn = document.getElementById("search-btn");
-var {lattitude, longitude} = {lat: 0, lon: 0};
+const dateInput = document.getElementById("start-date")
+var { lattitude, longitude } = { lattitude: 0, longitude: 0 };
+dateInput.min = new Date().toISOString().split("T")[0];
 searchBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (lat === 0 && lon === 0) {
+    if (lattitude === 0 && longitude === 0) {
         alert("Please select an address first.");
         return;
     }
-    
+    const startLocationCode = document.getElementById("start-airport").value;
+    const address = String(document.getElementById("address").value);
+    const addressSplit = address.split(" ");
+    const endAddressLine = `${address.slice(addressSplit[0].length + 1)}, ${addressSplit[0]}`;
+    const endCityName = document.getElementById("city").value;
+    const date = dateInput.value;
+    const time = document.getElementById("time").value;
+    const startDateTime = new Date(`${date}T${time}`);
+    const passengers = document.getElementById("passengers").value;
     fetch("/car-search", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(
-            { 
-                lattitude, 
-                longitude 
+            {
+                endGeoCode: `${lattitude},${longitude}`,
+                startLocationCode,
+                endAddressLine,
+                startDateTime,
+                endCityName,
+                passengers
             }
         ),
-    })
+    }).then(response => {
+        return response.json();
+    }).then(data => {
+        console.log(data);
+    }).catch(err => {
+        console.error("Error fetching car data", err);
+    });
 });
 
 const ACCESS_TOKEN = 'pk.eyJ1IjoianVzdC1pY2VkIiwiYSI6ImNtYXB3M216NzAzY3EyaXB0azBiMnEyMGQifQ.xfJTva7VHOClsVJ8Cuxsww';
