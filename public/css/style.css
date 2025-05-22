@@ -65,7 +65,7 @@ html, body {
   background-color: #4fa698;
   color: #fff;
   text-decoration: none;
-  border-radius: 50px;
+  border-radius: 30px;
   font-size: 16px;
   border: none;
 }
@@ -143,4 +143,12 @@ html, body {
 
 .pb-6{
   padding-bottom: 6rem !important;
+}
+
+.material-icons {
+  color: teal;
+}
+
+.pb-8{
+  padding-bottom: 8rem !important;
 }

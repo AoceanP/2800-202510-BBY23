@@ -26,62 +26,77 @@
     </div>
   </header>
 
-  <main class="container py-4">
-    <h3 class="fw-bold mb-4">Hi, <span id="name-goes-here">User</span></h3>
+  <main class="container py-4 pb-8">
+    <h3 class="fw-bold mb-4">Hi, <span id="name-goes-here"></span></h3>
 
-    <div class="row g-3 mb-5">
-      <div class="col-4 text-center">
-        <div class="action-card text-decoration-none text-teal d-block p-3">
-          <button onclick="redirectTo('/hotels')"
-            style="background: none; border: none; color: inherit; width: 100%; height: 100%;">
-            <span class="material-icons">hotel</span>
+    <div class="row g-3 mb-4">
+      <div class="col-6 text-center">
+        <div class="action-card p-3 bg-light rounded">
+          <button onclick="redirectTo('/hotels')" class="btn btn-transparent w-100 h-100">
+            <span class="material-icons display-4">hotel</span>
             <div>Hotels</div>
           </button>
         </div>
       </div>
-      <div class="col-4 text-center">
-        <div class="action-card text-decoration-none text-teal d-block p-3">
-          <button onclick="redirectTo('/flights')"
-            style="background: none; border: none; color: inherit; width: 100%; height: 100%;">
-            <span class="material-icons">flight</span>
+      <div class="col-6 text-center">
+        <div class="action-card p-3 bg-light rounded">
+          <button onclick="redirectTo('/flights')" class="btn btn-transparent w-100 h-100">
+            <span class="material-icons display-4">flight</span>
             <div>Flights</div>
           </button>
         </div>
       </div>
-      <div class="col-4 text-center">
-        <div class="action-card text-decoration-none text-teal d-block p-3">
-          <button onclick="redirectTo('/cars')"
-            style="background: none; border: none; color: inherit; width: 100%; height: 100%;">
-            <span class="material-icons">directions_car</span>
+      <div class="col-6 text-center">
+        <div class="action-card p-3 bg-light rounded">
+          <button onclick="redirectTo('/cars')" class="btn btn-transparent w-100 h-100">
+            <span class="material-icons display-4">directions_car</span>
             <div>Cars</div>
           </button>
         </div>
       </div>
       <div class="col-6 text-center">
-        <div class="action-card text-decoration-none text-teal d-block p-3">
-          <button onclick="redirectTo('/suggestions')"
-            style="background: none; border: none; color: inherit; width: 100%; height: 100%;">
-            <span class="material-icons">beach_access</span>
-            <div>Suggestions</div>
-          </button>
-        </div>
-      </div>
-      <div class="col-6 text-center">
-        <div class="action-card text-decoration-none text-teal d-block p-3">
-          <button onclick="redirectTo('/activities')"
-            style="background: none; border: none; color: inherit; width: 100%; height: 100%;">
-            <span class="material-icons">event</span>
+        <div class="action-card p-3 bg-light rounded">
+          <button onclick="redirectTo('/activities')" class="btn btn-transparent w-100 h-100">
+            <span class="material-icons display-4">add_business</span>
             <div>Activities</div>
           </button>
         </div>
       </div>
     </div>
 
-    <p>Explore from <span id="place-goes-here">Your Location</span></p>
+    <section class="py-5">
+      <div class="container">
+
+        <h5 class="fw-bold mb-4">Get Travel Suggestions</h5>
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h2 class="h4 text-center mb-4">Enter a location</h2>
+                <form id="suggestion-form">
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">
+                      <span class="material-icons">search</span>
+                    </span>
+                    <input type="text" id="location" name="location" class="form-control"
+                      placeholder="e.g. Paris, Tokyo…" required />
+                  </div>
+                  <button type="submit" class="btn btn-teal w-100">Get Suggestions</button>
+                </form>
+                <div id="suggestions" class="mt-4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
   </main>
   <div id="footerPlaceholder"></div>
 
   <script src="js/skeleton.js"></script>
+  <script src="js/suggestions.js"></script>
   <script>
     function redirectTo(path) {
       window.location.href = path;

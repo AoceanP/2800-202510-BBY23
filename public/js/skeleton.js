@@ -31,4 +31,19 @@ document.addEventListener('DOMContentLoaded', function () {
         window.goBack = function() {
             window.location.href = '/planner';
         };
+
+        fetch('/userName', { credentials: 'include' })
+        .then(r => r.ok ? r.json() : Promise.reject(r))
+        .then(user => {
+          const nameEl = document.getElementById('name-goes-here');
+          if (nameEl) nameEl.textContent = user.name;
+        })
+        .catch(() => {
+        });
+  
+      window.goBack = () => { window.location.href = '/planner'; };
 });
+  
+   
+  
+  
