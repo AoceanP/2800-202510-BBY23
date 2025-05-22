@@ -69,11 +69,23 @@
 
     <div id="flight-list" class="mt-5"></div>
     <template id="flight-template">
-      <div class="flight-item bg-white border rounded p-3 mb-3">
-        <h2 class="h5 flight-name"></h2>
-        <p class="flight-price"></p>
-        <ul class="flight-details ps-3"></ul>
-        <button class="btn btn-teal book-button">Book</button>
+      <div class="flight-item bg-white border rounded p-3 mb-3 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <h2 class="h5 d-flex align-items-center mb-0">
+            <span class="material-icons me-2">flight_takeoff</span>
+            <span class="flight-name"></span>
+          </h2>
+          <p class="d-flex align-items-center mb-0">
+            <span class="material-icons me-1 text-teal">attach_money</span>
+            <span class="flight-price fw-semibold text-teal"></span>
+          </p>
+        </div>
+        <ul class="flight-details list-unstyled ps-0 mb-3">
+        </ul>
+    
+        <div class="d-flex justify-content-start mt-3">
+          <button class="btn btn-teal book-button d-flex align-items-center">Book</button>
+        </div>
       </div>
     </template>
   </section>
