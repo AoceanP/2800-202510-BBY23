@@ -86,14 +86,33 @@
       <button class="btn btn-teal btn-lg w-100 rounded-pill" id="search-btn">Search</button>
       <span class="loader d-none"></span>
     </footer>
-    <ul class="list-group" id="car-offers"></ul>
-    <template id="car-offer-template">
-      <li>
-        <span class="text-center offer-id"></span>
-        <img src="" alt="A Car" class="offer-picture">
-        <button class="book-btn btn btn-success">Book</button>
-      </li>
-    </template>
+    <ul
+  id="car-offers"
+  class="row row-cols-1 row-cols-md-2 g-4 list-unstyled"
+></ul>
+
+<template id="car-offer-template">
+  <li class="col">
+    <div class="card h-100 shadow-sm">
+      <!-- JS will fill in the src and alt on this img -->
+      <img
+        src=""
+        alt="Car image"
+        class="card-img-top offer-picture"
+      >
+      <div class="card-body d-flex flex-column">
+        <!-- JS will set this text -->
+        <h5 class="card-title offer-id"></h5>
+        <!-- you can add more fields here if your JS ever injects more data -->
+        <button
+          class="mt-auto btn btn-teal book-btn"
+        >
+          Book Now
+        </button>
+      </div>
+    </div>
+  </li>
+</template>
     </section>
   </main>
   <div id="footerPlaceholder"></div>
