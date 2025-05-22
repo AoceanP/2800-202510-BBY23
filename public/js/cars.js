@@ -88,10 +88,3 @@ window.addEventListener('load', () => {
         [longitude, lattitude] = feature.geometry.coordinates;
     });
 });
-
-const addressForm = document.getElementById("address-form");
-const addressShowBtn = document.getElementById("address-show-btn");
-addressShowBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    addressForm.style.display = addressForm.style.display === "none" ? "inline" : "none";
-});
