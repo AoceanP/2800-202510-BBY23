@@ -1,0 +1,32 @@
+footer.navbar {
+  background-color: #ffffff;
+  border-top: 1px solid #dee2e6;
+  height: 20px;
+  font-size: 14px;
+  padding: 0;
+}
+
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+
+footer .text-muted {
+  margin: 0;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+footer .lang-selector {
+  font-size: 13px;
+  color: #6c757d;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+footer .lang-selector:hover {
+  text-decoration: underline;
+}

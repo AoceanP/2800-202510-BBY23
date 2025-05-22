@@ -1,22 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const navPlaceholders = document.querySelectorAll('#navbarPlaceholder');
-    fetch('nav.html')
-        .then(response => response.text())
-        .then(data => {
-            navPlaceholders.forEach(placeholder => {
-                const parser = new DOMParser();
-                const navDoc = parser.parseFromString(data, 'text/html');
-                const navContent = navDoc.querySelector('.nav').outerHTML;
-                const title = placeholder.textContent.trim();
-                placeholder.innerHTML = navContent;
-                const navDiv = placeholder.querySelector('.nav');
-                const titleSpan = document.createElement('span');
-                titleSpan.className = 'nav-title';
-                titleSpan.textContent = title;
-                navDiv.appendChild(titleSpan);
-            });
-        })
-        .catch(error => console.error('Error loading nav.html:', error));
+  const navPlaceholders = document.querySelectorAll('#navbarPlaceholder');
+  fetch('nav.html')
+    .then(response => response.text())
+    .then(data => {
+      navPlaceholders.forEach(placeholder => {
+        const parser = new DOMParser();
+        const navDoc = parser.parseFromString(data, 'text/html');
+        const navContent = navDoc.querySelector('nav').outerHTML;
+
+        placeholder.innerHTML = navContent;
+
+        if (window.location.pathname.endsWith('/home')) {
+          const backBtn = placeholder.querySelector('#back-btn');
+          if (backBtn) backBtn.style.display = 'none';
+        }
+      });
+    })
+    .catch(error => console.error('Error loading nav.html:', error));
 
     const footerPlaceholders = document.querySelectorAll('#footerPlaceholder');
     fetch('footer.html')
@@ -40,8 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(() => {
         });
-  
+
       window.goBack = () => { window.location.href = '/planner'; };
+      window.redirectTo = function(path) { window.location.href = path;};
+      
 });
   
    

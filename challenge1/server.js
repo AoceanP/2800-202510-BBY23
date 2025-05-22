@@ -27,4 +27,6 @@ app.get('/weather', async (req, res) => {
   }
 });
 
+app.use("/js", express.static(path.join(__dirname, "public/js")));
+
 app.listen(8000, () => console.log('Server running on port 8000'));

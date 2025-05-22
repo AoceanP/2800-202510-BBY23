@@ -1,0 +1,89 @@
+// public/js/destination.js
+
+document.addEventListener("DOMContentLoaded", () => {
+  bindPlanTrip();
+  loadFlights();
+  setupDestinationAutocomplete();
+});
+
+function bindPlanTrip() {
+  const btn = document.getElementById("planTripBtn");
+  if (btn) btn.addEventListener("click", () => {
+    window.location.href = "/planner";
+  });
+}
+
+async function loadFlights() {
+  try {
+    const res = await fetch("/api/flights");
+    const flights = await res.json();
+    const container = document.getElementById("flightResults");
+    if (!container) return;
+    container.innerHTML = "";
+    flights.forEach(({ origin, dest, price }) => {
+      const card = document.createElement("div");
+      card.className = "flight-card";
+      card.textContent = `${origin} → ${dest}: $${price}`;
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Error loading flights:", err);
+  }
+}
+
+function setupDestinationAutocomplete() {
+  const destInput  = document.getElementById("destinationInput");
+  const suggestBox = document.getElementById("destinationSuggestions");
+  let debounce;
+
+  if (!destInput || !suggestBox) {
+    console.warn("Destination autocomplete: missing DOM elements");
+    return;
+  }
+
+  function hide() {
+    suggestBox.style.display = "none";
+    suggestBox.innerHTML = "";
+  }
+
+  function render(list) {
+    if (!list.length) return hide();
+    suggestBox.innerHTML = list
+      .map(item => `
+        <li class="list-group-item py-2" data-iata="${item.iataCode}">
+          <span class="material-icons me-2">place</span>
+          ${item.name}, ${item.country} (${item.iataCode})
+        </li>
+      `).join("");
+    suggestBox.style.display = "block";
+  }
+
+  destInput.addEventListener("input", e => {
+    const q = e.target.value.trim();
+    clearTimeout(debounce);
+    if (!q) return hide();
+    debounce = setTimeout(async () => {
+      try {
+        const res  = await fetch(`/api/destinations?keyword=${encodeURIComponent(q)}`);
+        const data = await res.json();
+        render(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Autocomplete error:", err);
+        hide();
+      }
+    }, 300);
+  });
+
+  suggestBox.addEventListener("click", e => {
+    const li = e.target.closest("li");
+    if (!li) return;
+    destInput.value = li.textContent.trim();
+    hide();
+  });
+
+  document.addEventListener("click", e => {
+    if (!destInput.contains(e.target) && !suggestBox.contains(e.target)) {
+      hide();
+    }
+  });
+}

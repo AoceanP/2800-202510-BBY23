@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account - Budget Travel Planner</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="/css/nav.css" rel="stylesheet" />
+    <link href="/css/footer.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="d-flex flex-column min-vh-100 bg-white">
+    <div id="navbarPlaceholder"></div>
+
+    <main class="container py-4">
+        <h3 class="fw-bold mb-4">Account Settings</h3>
+
+        <div class="d-flex flex-column gap-3">
+            <button class="btn btn-teal rounded-pill py-3 px-4 d-flex align-items-center item-card"
+                onclick="toggleContent('name-content')">
+                <span class="material-icons text-teal me-3">person</span>
+                <span class="fw-semibold">Change Name</span>
+            </button>
+            <div id="name-content" class="card p-4" style="display: none;">
+                <form id="name-form">
+                    <input type="text" id="name" name="name" class="form-control mb-3" placeholder="Enter new name"
+                        required>
+                    <input type="password" id="password" name="password" class="form-control mb-3"
+                        placeholder="Enter current password" required>
+                    <button type="submit" class="btn btn-teal">Update Name</button>
+                    <button type="button" class="btn btn-secondary ms-2"
+                        onclick="toggleContent('name-content')">Cancel</button>
+                    <div id="name-error" class="text-danger mt-2" style="display: none;"></div>
+                    <div id="name-success" class="text-success mt-2" style="display: none;"></div>
+                </form>
+            </div>
+
+            <button class="btn btn-teal rounded-pill py-3 px-4 d-flex align-items-center item-card"
+                onclick="toggleContent('password-content')">
+                <span class="material-icons text-teal me-3">lock</span>
+                <span class="fw-semibold">Change Password</span>
+            </button>
+            <div id="password-content" class="card p-4" style="display: none;">
+                <form id="password-form">
+                    <input type="password" id="currentPassword" name="currentPassword" class="form-control mb-3"
+                        placeholder="Current password" required>
+                    <input type="password" id="newPassword" name="newPassword" class="form-control mb-3"
+                        placeholder="New password" required>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control mb-3"
+                        placeholder="Confirm new password" required>
+                    <button type="submit" class="btn btn-teal">Update Password</button>
+                    <button type="button" class="btn btn-secondary ms-2"
+                        onclick="toggleContent('password-content')">Cancel</button>
+                    <div id="password-error" class="text-danger mt-2" style="display: none;"></div>
+                    <div id="password-success" class="text-success mt-2" style="display: none;"></div>
+                </form>
+            </div>
+
+            <button class="btn btn-teal rounded-pill py-3 px-4 d-flex align-items-center item-card"
+                onclick="toggleContent('transactions-content')">
+                <span class="material-icons text-teal me-3">receipt</span>
+                <span class="fw-semibold">View Transactions</span>
+            </button>
+            <div id="transactions-content" class="card p-4" style="display: none;">
+                <h5 class="fw-bold mb-3">Past Transactions</h5>
+                <div id="transaction-list" class="list-group">
+                    <div id="no-transactions" class="text-muted" style="display: none;">No transactions found.</div>
+                </div>
+                <button type="button" class="btn btn-secondary mt-3"
+                    onclick="toggleContent('transactions-content')">Close</button>
+                <template id="transaction-template">
+                    <div class="list-group-item d-flex align-items-start rounded-pill py-3 px-4 item-card mb-2">
+                        <span class="material-icons text-teal me-3">receipt</span>
+                        <div class="flex-grow-1">
+                            <span class="fw-semibold transaction-name"></span>
+                            <div class="transaction-type text-muted"></div>
+                            <div class="transaction-price text-muted"></div>
+                            <div class="transaction-date text-muted"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <button id="signout-btn" class="btn btn-danger rounded-pill py-3 px-4 d-flex align-items-center item-card">
+                <span class="material-icons text-white me-3">logout</span>
+                <span class="fw-semibold">Sign Out</span>
+            </button>
+            <div id="signout-confirm" class="card p-4" style="display: none;">
+                <p class="mb-3">Are you sure you want to sign out?</p>
+                <button id="confirm-signout" class="btn btn-danger">Confirm Sign Out</button>
+                <button type="button" class="btn btn-secondary ms-2"
+                    onclick="toggleContent('signout-confirm')">Cancel</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="footerPlaceholder"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="/js/skeleton.js" defer></script>
+    <script src="/js/account.js" defer></script>
+</body>
+</html>
