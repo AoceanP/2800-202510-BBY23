@@ -544,9 +544,12 @@ app.get('/userName', (req, res) => {
   
       res.json(activities);
   
-    } catch {
+    } catch (err) {
+      console.error('Activities API error:', err);
       res.status(500).json({ error: 'Unable to fetch activities' });
-      
+    }
+  });    
+  
 app.get("/account", requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'account.html'));
 });
