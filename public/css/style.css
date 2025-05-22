@@ -1,7 +1,3 @@
-#cover {
-  max-width: 50%;
-  margin-left: auto;
-  margin-right: auto;
 :root {
   --primary-color: #006A71;
   --hover-bg: rgba(242, 239, 231, 0.6); /* adjustable opacity */
@@ -179,6 +175,7 @@ html, body {
 
 .pb-8{
   padding-bottom: 8rem !important;
+}
 .pb-6 {
   padding-bottom: 6rem !important;
 }
