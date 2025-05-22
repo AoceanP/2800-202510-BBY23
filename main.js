@@ -343,7 +343,7 @@ app.post("/addCartItem", (req, res) => {
             name: joi.string().required(),
             id: joi.string().required(),
             price: joi.number().required(),
-            type: joi.string().required().valid("Flight", "Hotel", "Car")
+            type: joi.string().required().valid("Flight", "Hotel", "Car", "Activity")
         });
         let query = schema.validate(req.body);
         if (query.error) {
