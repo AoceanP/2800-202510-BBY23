@@ -23,9 +23,6 @@ const mongoURI = process.env.MONGO_URI;
 
 // Serve static files from "public" folder
 app.use(express.static(path.join(__dirname, 'public')));
-app.use("/img", express.static(path.join(__dirname, "public/img")));
-app.use("/css", express.static(path.join(__dirname, "public/css")));
-app.use("/js", express.static(path.join(__dirname, "public/js")));
 
 const mongoStore = MongoStore.create({
     mongoUrl: mongoURI
@@ -58,6 +55,33 @@ const amadeus = new Amadeus({
     clientId: process.env.AMADEUS_CLIENT_ID,
     clientSecret: process.env.AMADEUS_CLIENT_SECRET
 });
+
+app.get('/api/destinations', async (req, res) => {
+  const { keyword } = req.query;
+  if (!keyword) {
+    return res.status(400).json({ error: 'Missing keyword parameter' });
+  }
+
+  try {
+    const response = await amadeus.referenceData.locations.get({
+      subType:   'CITY',
+      keyword:   keyword,
+      pageLimit: 6
+    });
+
+    const suggestions = response.data.map(loc => ({
+      name:     loc.address.cityName   || loc.name,
+      country:  loc.address.countryName,
+      iataCode: loc.iataCode
+    }));
+
+    res.json(suggestions);
+  } catch (err) {
+    console.error('Amadeus /api/destinations error:', err);
+    res.status(500).json({ error: 'Failed to fetch destinations' });
+  }
+});
+
 
 app.get("/flight-search", (req, res) => {
     if (!req.session.user) {
@@ -150,11 +174,19 @@ app.get('/', (req, res) => {
 
 app.get('/login', (req, res) => {
     if (req.session.user) {
-        res.redirect("/planner");
+        res.redirect("/home");
     } else {
         res.render('login', { error: req.session.error || null });
         req.session.error = null;
     }
+});
+
+app.get("/home", (req, res) => {
+  if (req.session.user) {
+    res.sendFile(path.join(__dirname, "public", "home.html"));
+  } else {
+    res.redirect("/");
+  }
 });
 
 app.post('/loginUser', async (req, res) => {
@@ -169,20 +201,26 @@ app.post('/loginUser', async (req, res) => {
             'any.required': 'Email or password doesn\'t match.'
         })
     });
+
     const { error } = schema.validate(req.body);
     if (error) {
         req.session.error = error.details[0].message;
         return res.redirect("/login");
     }
+
     try {
         const user = await users.findOne({ email: req.body.email });
         if (!user || !(await bcrypt.compare(req.body.password, user.password))) {
             req.session.error = "Email or password doesn't match.";
             return res.redirect("/login");
         }
-        user.password = "";
+
+        user.password = ""; // Strip password from session object
         req.session.user = user;
-        res.redirect("/planner");
+
+        // ✅ Redirect to home page after login
+        res.redirect("/home");
+
     } catch (err) {
         console.error('Login error:', err);
         req.session.error = "Server error. Please try again later.";

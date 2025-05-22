@@ -1,9 +1,16 @@
-const loginBtn = document.getElementById("login");
-loginBtn.addEventListener("click", event => {
-    window.location.href = "/login";
-});
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.getElementById("login");
+  const signupBtn = document.getElementById("signup");
 
-const signupBtn = document.getElementById("signup");
-signupBtn.addEventListener("click", event => {
-    window.location.href = "/signup";
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      window.location.href = "/login";
+    });
+  }
+
+  if (signupBtn) {
+    signupBtn.addEventListener("click", () => {
+      window.location.href = "/signup";
+    });
+  }
 });

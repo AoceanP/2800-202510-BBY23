@@ -1,3 +1,28 @@
-<div class="nav py-2">
-  <span class="material-icons" id="back-btn" onclick="goBack()" role="button" aria-label="Back">arrow_back</span>
-</div>
+<nav class="navbar navbar-expand-0 px-4 custom-navbar">
+  <div class="container-fluid d-flex justify-content-between align-items-center position-relative">
+    <a class="navbar-brand text-white fw-bold">Xplor</a>
+
+    <div class="d-none d-md-flex flex-grow-1 justify-content-center">
+      <ul class="navbar-nav d-flex flex-row align-items-center gap-3 mb-0">
+        <li class="nav-item"><a class="nav-link nav-pill text-white" href="/hotels">Hotels</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill text-white" href="/flights">Flights</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill text-white" href="/cars">Cars</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill text-white" href="/suggestions">Suggestions</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill text-white" href="/activities">Activities</a></li>
+      </ul>
+    </div>
+
+    <button class="navbar-toggler nav-pill text-white" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu" aria-controls="mobileMenu" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="material-icons">menu</span>
+    </button>
+  </div>
+
+  <div class="collapse position-absolute end-0 mobile-dropdown" id="mobileMenu">
+    <ul class="nav flex-column gap-2">
+      <li><a href="/home" class="nav-link text-white"><span class="material-icons me-1">home</span> Home</a></li>
+      <li><a href="/search" class="nav-link text-white"><span class="material-icons me-1">search</span> Search</a></li>
+      <li><a href="/trips" class="nav-link text-white"><span class="material-icons me-1">card_travel</span> Trips</a></li>
+      <li><a href="/account" class="nav-link text-white"><span class="material-icons me-1">person</span> Account</a></li>
+    </ul>
+  </div>
+</nav>
