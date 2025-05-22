@@ -554,9 +554,6 @@ app.post("/car-search", (req, res) => {
     });
 });
 
-app.use((req, res) => {
-    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-});
 app.get('/userName', (req, res) => {
     if (req.session.user) {
       return res.json({ name: req.session.user.name });
@@ -565,11 +562,24 @@ app.get('/userName', (req, res) => {
     }
   });
 
-app.get('/userName', (req, res) => {
-    if (req.session.user) {
-      return res.json({ name: req.session.user.name });
-    } else {
-      return res.status(401).json({ error: 'Not logged in' });
+  app.get('/api/activities', async (req, res) => {
+    try {
+      const locs = (await amadeus.referenceData.locations.get({
+        keyword: req.query.keyword,
+        subType: 'CITY'
+      })).data;
+  
+      if (!locs.length) return res.json([]);
+  
+      const { latitude, longitude } = locs[0].geoCode;
+      const activities = (await amadeus.shopping.activities.get({
+        latitude, longitude, radius: req.query.radius || 1
+      })).data;
+  
+      res.json(activities);
+  
+    } catch {
+      res.status(500).json({ error: 'Unable to fetch activities' });
     }
   });
 
