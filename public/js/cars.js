@@ -2,6 +2,7 @@ const searchBtn = document.getElementById("search-btn");
 const dateInput = document.getElementById("start-date");
 const offerList = document.getElementById("car-offers");
 const offerTemplate = document.getElementById("car-offer-template");
+const loader = document.querySelector(".loader");
 var { lattitude, longitude } = { lattitude: 0, longitude: 0 };
 dateInput.min = new Date().toISOString().split("T")[0];
 searchBtn.addEventListener("click", (e) => {
@@ -10,6 +11,7 @@ searchBtn.addEventListener("click", (e) => {
         alert("Please select an address first.");
         return;
     }
+    loader.classList.remove("d-none");
     const startLocationCode = document.getElementById("start-airport").value;
     const address = String(document.getElementById("address").value);
     const addressSplit = address.split(" ");
@@ -66,6 +68,7 @@ searchBtn.addEventListener("click", (e) => {
                 });
             });
             offerList.appendChild(newOffer);
+            loader.classList.add("d-none");
         }
     }).catch(err => {
         console.error("Error fetching car data", err);
