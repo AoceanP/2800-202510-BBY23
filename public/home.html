@@ -42,26 +42,27 @@
       </div>
     </div>
 
-  
-  <div class="col-md-4 position-relative">
-  <label for="destinationInput" class="form-label fw-semibold">Destination</label>
+ <div class="col-md-4 position-relative">
+  <label for="destination" class="form-label fw-semibold">Destination</label>
   <div class="input-group">
-    <span class="input-group-text material-icons">location_on</span>
+    <span class="input-group-text material-icons">place</span>
     <input
       type="text"
-      id="destinationInput"
+      id="destination"
       class="form-control"
       placeholder="Where are you going?"
-      autocomplete="on"
+      autocomplete="off"
     />
   </div>
-  
-  <ul
-    id="destinationSuggestions"
-    class="list-group position-absolute w-100 mt-1"
-    style="z-index:1000; display:none;"
-  ></ul>
+  <div
+    id="destination-suggestions"
+    class="list-group position-absolute w-100 mt-1 hidden"
+    style="z-index:1050;"
+  ></div>
 </div>
+
+
+
 
   <div class="text-center mt-3">
     <button type="submit" id="searchBtn" class="btn btn-primary px-4">Search</button>

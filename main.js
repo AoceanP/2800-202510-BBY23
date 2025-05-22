@@ -78,26 +78,29 @@ const amadeus = new Amadeus({
     clientSecret: process.env.AMADEUS_CLIENT_SECRET
 });
 
-app.get('/api/destinations', async (req, res, next) => {
-    try {
-        const { keyword } = req.query;
-        if (!keyword) {
-            return res.status(400).json({ error: 'Missing keyword parameter' });
-        }
-        const response = await amadeus.referenceData.locations.get({
-            subType: 'CITY',
-            keyword: keyword,
-            pageLimit: 6
-        });
-        const suggestions = response.data.map(loc => ({
-            name: loc.address.cityName || loc.name,
-            country: loc.address.countryName,
-            iataCode: loc.iataCode
-        }));
-        res.json(suggestions);
-    } catch (err) {
-        next(err);
-    }
+
+app.get('/api/locations', async (req, res) => {
+  const { keyword } = req.query;
+  if (!keyword) return res.status(400).json([]);
+
+  try {
+    // ←– use the City‑Search endpoint, not the generic locations.get()
+    const response = await amadeus.referenceData.locations.cities.get({
+      keyword: keyword,    // e.g. 'vancouver'
+    });
+
+    const suggestions = response.data.map(loc => ({
+      name:     loc.name,               // e.g. "Vancouver"
+      iataCode: loc.iataCode,           // e.g. "YVR"
+      region:   loc.address?.region,    // e.g. "British Columbia"
+      country:  loc.address?.countryCode // e.g. "CA"
+    }));
+
+    return res.json(suggestions);
+  } catch (err) {
+    console.error('City‑search error:', err);
+    return res.status(500).json([]);
+  }
 });
 
 app.get("/flight-search", requireAuth, async (req, res, next) => {
@@ -164,6 +167,8 @@ app.post("/flight-booking", requireAuth, async (req, res, next) => {
         next(err);
     }
 });
+
+
 
 // Default route
 app.get('/', (req, res) => {

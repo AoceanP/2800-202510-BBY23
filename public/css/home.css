@@ -31,75 +31,55 @@ body {
   padding: 40px 60px;
 }
 
-.booking-search-bar {
-  background-color: #f5f5f5;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 16px;
-  margin-bottom: 52px;
+.autocomplete {
+  position: relative;
+  width: 100%;
 }
 
-.booking-search-bar .form-control,
-.booking-search-bar .form-select {
-  max-width: 180px;
-  min-width: 160px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
+#destination-suggestions {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: .25rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  z-index: 1050;
 }
 
-.booking-search-bar .search-btn {
-  white-space: nowrap;
-  padding: 10px 24px;
-  border-radius: 8px;
-}
-
-#flight-search-form .row {
-  margin-bottom: 1rem;
-}
-
-#guestDropdownBtn {
-  background-color: #fff;
-  border: 1px solid #ced4da;
-  height: 38px;
-}
-
-#guestDropdownBtn:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-#guestDropdownMenu {
-  z-index: 1000;
-}
-
-#guestDropdownMenu li {
+.suggestion-item {
+  display: flex;
   align-items: center;
+  cursor: pointer;
+  padding: .5rem 1rem;
+  transition: background-color .15s;
 }
 
-#guestDropdownMenu label {
-  font-weight: 500;
-}
-
-#guestDropdownMenu input[type="number"] {
+.suggestion-item .details {
+  flex: 1;
   text-align: center;
 }
 
-#destinationSuggestions {
-  max-height: 200px;
-  overflow-y: auto;
-  cursor: pointer;
+.suggestion-item:hover,
+.suggestion-item.active {
+  background-color: rgba(0,0,0,.05);
 }
 
-#destinationSuggestions .list-group-item {
-  display: flex;
-  align-items: center;
+#searchBtn {
+  background-color: #48A6A7;
+  border-color:     #48A6A7;
+  color:            #ffffff;
 }
 
-#destinationSuggestions .material-icons {
-  font-size: 1.1rem;
-  margin-right: 0.5rem;
+#searchBtn:hover,
+#searchBtn:focus {
+  background-color: #8BB9C0;
+  border-color:     #8BB9C0;
 }
 
+.hidden {
+  display: none !important;
+}
 
 @media (min-width: 768px) {
   #flight-search-form .form-control,
