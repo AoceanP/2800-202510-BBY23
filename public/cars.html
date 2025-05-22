@@ -29,7 +29,7 @@
 
   <main class=" container py-4">
     <ul class="list-group">
-      <li class="list-group-item d-flex align-items-start rounded-5 mb-3 py-3 px-4 item-card">
+      <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">flight</span>
         <div class="d-flex flex-column">
           <span class="fw-semibold">Starting Airport</span>
@@ -37,41 +37,40 @@
             required>
         </div>
       </li>
-      <li class="list-group-item rounded-5 mb-3 py-3 px-4 item-card">
-        <div class="row gx-3 align-items-start">
-          <div class="col-auto">
-            <span class="material-icons text-teal fs-3">place</span>
-          </div>
-          <div class="col">
-            <div class="fw-semibold mb-3">Location</div>
-            <div class="row g-2">
-              <div class="col-sm-6">
-                <input type="text"class="form-control"id="address"name="address"placeholder="Street Address"autocomplete="address-line1"required></div>
-              <div class="col-sm-6">
-                <input type="text"class="form-control"id="city"name="city"placeholder="City"autocomplete="address-level2"required></div>
-              <div class="col-sm-6">
-                <input type="text"class="form-control"name="state" placeholder="State/Province"autocomplete="address-level1"required></div>
-              <div class="col-sm-6">
-                <input ype="text"class="form-control"name="postcode"placeholder="ZIP/Postcode" autocomplete="postal-code"required></div>
-            </div>
-          </div>
+      <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
+        <button type="button" class="" style="background-color: 0" id="address-show-btn">
+          <span class="material-icons text-teal me-3">place</span>
+        </button>
+        <div class="d-flex flex-column">
+          <span class="fw-semibold">Location</span>
+          <small class="text-muted">Choose a Location</small>
+        </div>
+        <div class="d-flex flex-column btn-group mt-2 mb-12 ml-2"><br><br>
+          <form id="address-form" style="display: none;" class="ml-5">
+            <input class="input" id="address" name="address" autocomplete="address-line1" placeholder="Address"
+              required>
+            <input class="input" id="city" name="city" autocomplete="address-level2" placeholder="City" required>
+            <input class="input" name="state" autocomplete="address-level1" placeholder="State / Province" required>
+            <input class="input" name="postcode" autocomplete="postal-code" placeholder="ZIP / Postcode" required>
+          </form>
         </div>
       </li>
-      <li class="list-group-item d-flex align-items-start rounded-5 mb-3 py-3 px-4 item-card">
+      <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">date_range</span>
         <div class="d-flex flex-column">
           <span class="fw-semibold">Dates</span>
+          <small class="text-muted">Choose travel dates</small>
           <input type="date" class="form-control" id="start-date" min="" placeholder="Start Date" required>
         </div>
       </li>
-      <li class="list-group-item d-flex align-items-start rounded-5 mb-3 py-3 px-4 item-card">
+      <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">access_time</span>
         <div class="d-flex flex-column">
           <span class="fw-semibold">Pick-up Time</span>
           <small class="text-muted"><input type="time" id="time" required></small>
         </div>
       </li>
-      <li class="list-group-item d-flex align-items-start rounded-5 mb-3 py-3 px-4 item-card">
+      <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">groups</span>
         <div class="d-flex flex-column">
           <span class="fw-semibold">Passengers</span>
@@ -81,38 +80,17 @@
       </li>
     </ul>
     <footer class="p-4">
-      <button class="btn btn-teal btn-lg w-100 rounded-5" id="search-btn">Search</button>
+      <button class="btn btn-teal btn-lg w-100 rounded-pill" id="search-btn">Search</button>
       <span class="loader d-none"></span>
     </footer>
     <ul class="list-group" id="car-offers"></ul>
     <template id="car-offer-template">
-      <li class="list-group-item p-0 border-0 mb-3">
-        <div class="card shadow-sm h-100">
-          <div class="row g-0">
-
-            <div class="col-4">
-              <img
-                src=""
-                alt="Car image"
-                class="offer-picture img-fluid rounded-start"
-                style="object-fit: cover; height: 100%;"
-              >
-            </div>
-            <div class="col-8">
-              <div class="card-body d-flex flex-column justify-content-between">
-                <div>
-                  <h6 class="card-title offer-id text-teal"></h6>
-                </div>
-                <div class="text-end">
-                  <button class="book-btn btn btn-teal">Book</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <li>
+        <span class="text-center offer-id"></span>
+        <img src="" alt="A Car" class="offer-picture">
+        <button class="book-btn btn btn-success">Book</button>
       </li>
     </template>
-    
   </main>
   <div id="footerPlaceholder"></div>
   <!-- Scripts -->

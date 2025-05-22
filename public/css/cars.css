@@ -1,8 +1,0 @@
-.offer-picture {
-  width: 100%;
-  height: var(--img-height);
-  object-fit: contain;          
-  background-color: #f8f9fa;     
-  display: block;
-}
-  
