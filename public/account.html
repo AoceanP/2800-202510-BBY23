@@ -12,15 +12,17 @@
     <link href="/css/nav.css" rel="stylesheet" />
     <link href="/css/footer.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
+    <link href="/css/home.css" rel="stylesheet" />
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="d-flex flex-column min-vh-100 bg-white">
     <div id="navbarPlaceholder"></div>
 
+     <section class="cloud-section">
+    <div class="main-card text-center">
     <main class="container py-4">
         <h3 class="fw-bold mb-4">Account Settings</h3>
-
         <div class="d-flex flex-column gap-3">
             <button class="btn btn-teal rounded-pill py-3 px-4 d-flex align-items-center item-card"
                 onclick="toggleContent('name-content')">
@@ -98,6 +100,7 @@
                     onclick="toggleContent('signout-confirm')">Cancel</button>
             </div>
         </div>
+        </section>
     </main>
 
     <div id="footerPlaceholder"></div>
