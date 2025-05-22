@@ -592,9 +592,13 @@ app.post("/car-search", (req, res) => {
     });
 });
 
-app.use((req, res) => {
-    res.status(404).sendFile(path.join(__dirname, 'public', '404.html'));
-});
+app.get('/userName', (req, res) => {
+    if (req.session.user) {
+      return res.json({ name: req.session.user.name });
+    } else {
+      return res.status(401).json({ error: 'Not logged in' });
+    }
+  });
 
 app.post('/hotels', (req, res) => {
     if (req.session.user) {

@@ -18,14 +18,34 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .catch(error => console.error('Error loading nav.html:', error));
 
-  // Load footer.html
-  const footerPlaceholders = document.querySelectorAll('#footerPlaceholder');
-  fetch('footer.html')
-    .then(response => response.text())
-    .then(data => {
-      footerPlaceholders.forEach(placeholder => {
-        placeholder.innerHTML = data;
-      });
-    })
-    .catch(error => console.error('Error loading footer.html:', error));
+    const footerPlaceholders = document.querySelectorAll('#footerPlaceholder');
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(data => {
+            footerPlaceholders.forEach(placeholder => {
+                placeholder.innerHTML = data;
+            });
+        })
+        .catch(error => console.error('Error loading footer.html:', error));
+
+        window.goBack = function() {
+            window.location.href = '/planner';
+        };
+
+        fetch('/userName', { credentials: 'include' })
+        .then(r => r.ok ? r.json() : Promise.reject(r))
+        .then(user => {
+          const nameEl = document.getElementById('name-goes-here');
+          if (nameEl) nameEl.textContent = user.name;
+        })
+        .catch(() => {
+        });
+
+      window.goBack = () => { window.location.href = '/planner'; };
+      window.redirectTo = function(path) { window.location.href = path;};
+      
 });
+  
+   
+  
+  
