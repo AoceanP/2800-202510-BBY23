@@ -40,8 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(() => {
         });
-  
+
       window.goBack = () => { window.location.href = '/planner'; };
+      window.redirectTo = function(path) { window.location.href = path;};
+      
 });
   
    
