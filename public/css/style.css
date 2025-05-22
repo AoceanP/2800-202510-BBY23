@@ -69,7 +69,7 @@ html, body {
 .btn-teal {
   display: inline-block;
   padding: 12px 32px;
-  background-color: #4fa698;
+  background-color:  #006A71;
   color: #fff;
   text-decoration: none;
   border-radius: 30px;
@@ -148,7 +148,7 @@ html, body {
 }
 
 .text-teal {
-  color: #008080 !important;
+  color: #006A71!important;
 }
 
 .pb-6 {
@@ -162,13 +162,13 @@ html, body {
 }
 
 .material-icons {
-  color: teal;
+  color: #006A71;
 }
 
 .pb-8{
   padding-bottom: 8rem !important;
 .material-icons {
-  color: teal;
+  color:  #006A71;
 }
 
 .pb-8{
