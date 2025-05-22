@@ -3,12 +3,19 @@ const flightOfferTemplate = document.getElementById('flight-template');
 const flightOfferList = document.getElementById('flight-list');
 const departureDateInput = document.getElementById('departureDate');
 const loader = document.querySelector(".loader");
+const originInput = document.getElementById('origin');
+
+const params = new URLSearchParams(document.location.search);
+const destinationInput = document.getElementById('destination');
 departureDateInput.min = new Date().toISOString().split("T")[0];
+departureDateInput.value = params.get("departureDate");
+document.getElementById("returnDate").value = params.get("returnDate");
+
 searchBtn.addEventListener('click', e => {
     e.preventDefault();
     loader.classList.remove("d-none");
-    const origin = document.getElementById('origin').value;
-    const destination = document.getElementById('destination').value;
+    const origin = originInput.value;
+    const destination = destinationInput.value;
     const departureDate = departureDateInput.value;
     fetch(`/flight-search?originCode=${origin}&destinationCode=${destination}&departureDate=${departureDate}`, {
         method: "GET",
@@ -41,11 +48,11 @@ searchBtn.addEventListener('click', e => {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(
-                        { 
+                        {
                             name: `${offer.source} - ${origin} to ${destination} on ${departureDate}`,
                             price: offer.price.total,
                             id: offer.id,
-                            type: "Flight", 
+                            type: "Flight",
                         }
                     )
                 }).then(response => {
