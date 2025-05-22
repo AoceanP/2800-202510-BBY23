@@ -59,10 +59,10 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors({
-    origin: "http://localhost:8000", // Restrict to app origin
+    origin: "*",
     methods: ["GET", "POST"],
     credentials: true
-}));
+  }));
 
 // Middleware to check session
 const requireAuth = (req, res, next) => {
