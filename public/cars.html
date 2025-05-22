@@ -61,7 +61,16 @@
     </ul>
     <footer class="p-4">
       <button class="btn btn-teal btn-lg w-100 rounded-pill" id="search-btn">Search</button>
+      <span class="loader d-none"></span>
     </footer>
+    <ul class="list-group" id="car-offers"></ul>
+    <template id="car-offer-template">
+      <li>
+        <span class="text-center offer-id"></span>
+        <img src="" alt="A Car" class="offer-picture">
+        <button class="book-btn btn btn-success">Book</button> 
+      </li>
+    </template>
   </main>
   <div id="footerPlaceholder"></div>
   <!-- Scripts -->

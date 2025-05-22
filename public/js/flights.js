@@ -2,9 +2,11 @@ const searchBtn = document.getElementById('searchBtn');
 const flightOfferTemplate = document.getElementById('flight-template');
 const flightOfferList = document.getElementById('flight-list');
 const departureDateInput = document.getElementById('departureDate');
+const loader = document.querySelector(".loader");
 departureDateInput.min = new Date().toISOString().split("T")[0];
 searchBtn.addEventListener('click', e => {
     e.preventDefault();
+    loader.classList.remove("d-none");
     const origin = document.getElementById('origin').value;
     const destination = document.getElementById('destination').value;
     const departureDate = departureDateInput.value;
@@ -21,6 +23,7 @@ searchBtn.addEventListener('click', e => {
         console.log(data.data);
         data.data.forEach(offer => {
             let flightOffer = flightOfferTemplate.content.cloneNode(true);
+            console.log(flightOffer);
             flightOffer.querySelector('.flight-name').innerHTML = offer.source;
             flightOffer.querySelector('.flight-price').innerHTML = offer.price.total + " " + offer.price.currency;
             details = "";
@@ -55,6 +58,7 @@ searchBtn.addEventListener('click', e => {
                 });
             });
             flightOfferList.appendChild(flightOffer);
+            loader.classList.add("d-none");
         });
     }).catch(err => {
         console.error(err);
