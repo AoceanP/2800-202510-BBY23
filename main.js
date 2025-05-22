@@ -334,7 +334,7 @@ app.post("/addCartItem", requireAuth, async (req, res, next) => {
             name: joi.string().required(),
             id: joi.string().required(),
             price: joi.number().required(),
-            type: joi.string().required().valid("Flight", "Hotel", "Car")
+            type: joi.string().required().valid("Flight", "Hotel", "Car", "Activity")
         });
         const { error } = schema.validate(req.body);
         if (error) {
@@ -520,6 +520,33 @@ app.get('/userName', requireAuth, (req, res) => {
     res.json({ name: req.session.user.name });
 });
 
+app.get('/userName', (req, res) => {
+    if (req.session.user) {
+      return res.json({ name: req.session.user.name });
+    } else {
+      return res.status(401).json({ error: 'Not logged in' });
+    }
+  });
+
+  app.get('/api/activities', async (req, res) => {
+    try {
+      const locs = (await amadeus.referenceData.locations.get({
+        keyword: req.query.keyword,
+        subType: 'CITY'
+      })).data;
+  
+      if (!locs.length) return res.json([]);
+  
+      const { latitude, longitude } = locs[0].geoCode;
+      const activities = (await amadeus.shopping.activities.get({
+        latitude, longitude, radius: req.query.radius || 1
+      })).data;
+  
+      res.json(activities);
+  
+    } catch {
+      res.status(500).json({ error: 'Unable to fetch activities' });
+      
 app.get("/account", requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'account.html'));
 });
