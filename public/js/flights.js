@@ -21,6 +21,7 @@ searchBtn.addEventListener('click', e => {
         console.log(data.data);
         data.data.forEach(offer => {
             let flightOffer = flightOfferTemplate.content.cloneNode(true);
+            console.log(flightOffer);
             flightOffer.querySelector('.flight-name').innerHTML = offer.source;
             flightOffer.querySelector('.flight-price').innerHTML = offer.price.total + " " + offer.price.currency;
             details = "";

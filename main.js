@@ -510,11 +510,10 @@ app.get("/cars", (req, res) => {
 });
 
 app.post("/car-search", (req, res) => {
-    // if (!req.session.user) {
-    //     res.status(401).send("Unauthorized");
-    //     return;
-    // }
-    console.log(req.body);
+    if (!req.session.user) {
+        res.status(401).send("Unauthorized");
+        return;
+    }
     const schema = joi.object({
         startLocationCode: joi.string().required(),
         endAddressLine: joi.string().required(),
@@ -545,7 +544,8 @@ app.post("/car-search", (req, res) => {
         endCityName,
         endGeoCode,
         startDateTime,
-        passengers
+        passengers,
+        currenyCode: "CAD"
     }).then(response => {
         res.send(response.result);
     }).catch(err => {

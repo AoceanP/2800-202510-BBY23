@@ -1,5 +1,7 @@
 const searchBtn = document.getElementById("search-btn");
-const dateInput = document.getElementById("start-date")
+const dateInput = document.getElementById("start-date");
+const offerList = document.getElementById("car-offers");
+const offerTemplate = document.getElementById("car-offer-template");
 var { lattitude, longitude } = { lattitude: 0, longitude: 0 };
 dateInput.min = new Date().toISOString().split("T")[0];
 searchBtn.addEventListener("click", (e) => {
@@ -36,6 +38,15 @@ searchBtn.addEventListener("click", (e) => {
         return response.json();
     }).then(data => {
         console.log(data);
+        for (carOffer of data.data) {
+            let newOffer = offerTemplate.content.cloneNode(true);
+            newOffer.querySelector(".offer-id").innerText = carOffer.id;
+            newOffer.querySelector(".offer-picture").src = carOffer.vehicle.imageURL;
+            newOffer.querySelector(".book-btn").addEventListener("click", e => {
+                console.log(carOffer.id);
+            });
+            offerList.appendChild(newOffer);
+        }
     }).catch(err => {
         console.error("Error fetching car data", err);
     });
@@ -52,8 +63,6 @@ window.addEventListener('load', () => {
         const feature = e.detail.features[0];
         // Coordinates are in [longitude, latitude] format
         [longitude, lattitude] = feature.geometry.coordinates;
-        // You can now use lat and lon as needed
-        console.log('Latitude:', lattitude, 'Longitude:', longitude);
     });
 });
 
