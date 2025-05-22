@@ -1,38 +1,32 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cars</title>
-
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
   <!-- Google Material Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <!-- Mapbox -->
   <link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">
-  <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
+  <!-- Custom CSS -->
+  <link href="/css/nav.css" rel="stylesheet" />
+  <link href="/css/footer.css" rel="stylesheet" />
   <link href="/css/style.css" rel="stylesheet" />
 </head>
 
 <body class="d-flex flex-column min-vh-100 bg-white">
-
-  <header class="border-bottom py-2">
-    <div class="container justify-content-between align-items-center">
-      <nav id="navbarPlaceholder">Car Rental</nav>
-    </div>
-  </header>
-  <main class=" container py-4">
+  <div id="navbarPlaceholder"></div>
+  <main class="container py-4">
     <ul class="list-group">
       <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">flight</span>
         <div class="d-flex flex-column">
           <span class="fw-semibold">Starting Airport</span>
-          <input type="text" autocomplete="airport" class="form-control" id="start-airport" placeholder="Start Airport" required>
+          <input type="text" autocomplete="airport" class="form-control" id="start-airport" placeholder="Start Airport"
+            required>
         </div>
       </li>
       <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
@@ -43,20 +37,16 @@
           <span class="fw-semibold">Location</span>
           <small class="text-muted">Choose a Location</small>
         </div>
-      
-      <div class="d-flex flex-column btn-group mt-2 mb-12 ml-2"><br><br>
-
-        <form id="address-form" style="display: none;" class="ml-5">
-          <input class="input" id="address" name="address" autocomplete="address-line1" placeholder="Address" reqquired>
-          <input class="input" id="city" name="city" autocomplete="address-level2" placeholder="City" required>
-          <input class="input" name="state" autocomplete="address-level1" placeholder="State / Province" required>
-          <input class="input" name="postcode" autocomplete="postal-code" placeholder="ZIP / Postcode" required>
-        </form>
-      </div>
-
-      </div>
+        <div class="d-flex flex-column btn-group mt-2 mb-12 ml-2"><br><br>
+          <form id="address-form" style="display: none;" class="ml-5">
+            <input class="input" id="address" name="address" autocomplete="address-line1" placeholder="Address"
+              required>
+            <input class="input" id="city" name="city" autocomplete="address-level2" placeholder="City" required>
+            <input class="input" name="state" autocomplete="address-level1" placeholder="State / Province" required>
+            <input class="input" name="postcode" autocomplete="postal-code" placeholder="ZIP / Postcode" required>
+          </form>
+        </div>
       </li>
-
       <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">date_range</span>
         <div class="d-flex flex-column">
@@ -65,7 +55,6 @@
           <input type="date" class="form-control" id="start-date" min="" placeholder="Start Date" required>
         </div>
       </li>
-
       <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">access_time</span>
         <div class="d-flex flex-column">
@@ -73,15 +62,14 @@
           <small class="text-muted"><input type="time" id="time" required></small>
         </div>
       </li>
-
       <li class="list-group-item d-flex align-items-start rounded-pill mb-3 py-3 px-4 item-card">
         <span class="material-icons text-teal me-3">groups</span>
         <div class="d-flex flex-column">
           <span class="fw-semibold">Passengers</span>
-          <small class="text-muted"><input id="passengers" type="number" min="1" max="10" value="1" step="1" required></small>
+          <small class="text-muted"><input id="passengers" type="number" min="1" max="10" value="1" step="1"
+              required></small>
         </div>
       </li>
-
     </ul>
     <footer class="p-4">
       <button class="btn btn-teal btn-lg w-100 rounded-pill" id="search-btn">Search</button>
@@ -92,16 +80,24 @@
       <li>
         <span class="text-center offer-id"></span>
         <img src="" alt="A Car" class="offer-picture">
-        <button class="book-btn btn btn-success">Book</button> 
+        <button class="book-btn btn btn-success">Book</button>
       </li>
     </template>
   </main>
-
-
   <div id="footerPlaceholder"></div>
-
-  <script src="js/cars.js"></script>
-  <script src="js/skeleton.js"></script>
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"
+    defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"
+    defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"
+    defer></script>
+  <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0/web.js"></script>
+  <script src="/js/skeleton.js" defer></script>
+  <script src="/js/cars.js" defer></script>
 </body>
 
 </html>
