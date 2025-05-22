@@ -1,104 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Flights</title>
-
   <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
-
-  <!-- Material Icons -->
-  <link
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    rel="stylesheet"
-  />
-
-  <!-- Your custom styles -->
-  <link href="css/style.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Google Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <!-- Custom CSS -->
+  <link href="/css/nav.css" rel="stylesheet" />
+  <link href="/css/footer.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
 </head>
 
 <body class="d-flex flex-column min-vh-100 bg-light">
-
-
-  <header class="border-bottom py-2 bg-white">
-    <div class="container justify-content-between align-items-center">
-      <nav id="navbarPlaceholder">Flights</nav>
-    </div>
-  </header>
-
+  <div id="navbarPlaceholder"></div>
   <main class="flex-grow-1 container pb-6 pt-5">
     <form id="flight-search-form">
       <ul class="list-group gap-3">
-
-        <!-- Origin -->
         <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
           <span class="material-icons text-teal me-3">place</span>
           <div class="flex-grow-1">
             <label for="origin" class="fw-semibold mb-1 d-block">Flying From</label>
-            <input type="text"
-                   id="origin"
-                   name="departure"
-                   class="form-control form-control-sm border-0 p-0 bg-transparent"
-                   placeholder="Enter airport code"
-                   autocomplete="airport">
+            <input type="text" id="origin" name="departure"
+              class="form-control form-control-sm border-0 p-0 bg-transparent" placeholder="Enter airport code"
+              autocomplete="airport">
           </div>
         </li>
-
-        <!-- Destination -->
         <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
           <span class="material-icons text-teal me-3">place</span>
           <div class="flex-grow-1">
             <label for="destination" class="fw-semibold mb-1 d-block">Flying To</label>
-            <input type="text"
-                   id="destination"
-                   name="arrival"
-                   class="form-control form-control-sm border-0 p-0 bg-transparent"
-                   placeholder="Enter airport code"
-                   autocomplete="city">
+            <input type="text" id="destination" name="arrival"
+              class="form-control form-control-sm border-0 p-0 bg-transparent" placeholder="Enter airport code"
+              autocomplete="city">
           </div>
         </li>
-
-        <!-- Departure Date -->
         <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
           <span class="material-icons text-teal me-3">calendar_today</span>
           <div class="flex-grow-1">
             <label for="departureDate" class="fw-semibold mb-1 d-block">Departure Date</label>
-            <input type="date"
-                   id="departureDate"
-                   name="departure-date"
-                   class="form-control form-control-sm border-0 p-0 bg-transparent">
+            <input type="date" id="departureDate" name="departure-date"
+              class="form-control form-control-sm border-0 p-0 bg-transparent">
           </div>
         </li>
-
-        <!-- Return Date -->
         <li class="list-group-item d-flex align-items-start rounded-pill py-3 px-4">
           <span class="material-icons text-teal me-3">calendar_today</span>
           <div class="flex-grow-1">
             <label for="returnDate" class="fw-semibold mb-1 d-block">Return Date</label>
-            <input type="date"
-                   id="returnDate"
-                   name="return-date"
-                   class="form-control form-control-sm border-0 p-0 bg-transparent">
+            <input type="date" id="returnDate" name="return-date"
+              class="form-control form-control-sm border-0 p-0 bg-transparent">
           </div>
         </li>
-
       </ul>
-
       <div class="mt-4">
-        <button type="submit"
-                id="searchBtn"
-                class="btn btn-teal w-100 rounded-pill py-2">
+        <button type="submit" id="searchBtn" class="btn btn-teal w-100 rounded-pill py-2">
           Search
         </button>
       </div>
     </form>
+    <span class="loader d-none"></span>
 
     <div id="flight-list" class="mt-5"></div>
-
     <template id="flight-template">
       <div class="flight-item bg-white border rounded p-3 mb-3">
         <h2 class="h5 flight-name"></h2>
@@ -108,14 +73,12 @@
       </div>
     </template>
   </main>
-  <script src="js/flights.js"></script>
   <div id="footerPlaceholder"></div>
-  
   <!-- Scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  
-  <script src="js/flights.js"></script>
-  <script src="js/skeleton.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="/js/skeleton.js" defer></script>
+  <script src="/js/flights.js" defer></script>
 </body>
-</html>
 
+</html>

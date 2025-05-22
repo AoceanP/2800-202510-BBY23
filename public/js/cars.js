@@ -1,5 +1,8 @@
 const searchBtn = document.getElementById("search-btn");
-const dateInput = document.getElementById("start-date")
+const dateInput = document.getElementById("start-date");
+const offerList = document.getElementById("car-offers");
+const offerTemplate = document.getElementById("car-offer-template");
+const loader = document.querySelector(".loader");
 var { lattitude, longitude } = { lattitude: 0, longitude: 0 };
 dateInput.min = new Date().toISOString().split("T")[0];
 searchBtn.addEventListener("click", (e) => {
@@ -8,6 +11,7 @@ searchBtn.addEventListener("click", (e) => {
         alert("Please select an address first.");
         return;
     }
+    loader.classList.remove("d-none");
     const startLocationCode = document.getElementById("start-airport").value;
     const address = String(document.getElementById("address").value);
     const addressSplit = address.split(" ");
@@ -36,6 +40,36 @@ searchBtn.addEventListener("click", (e) => {
         return response.json();
     }).then(data => {
         console.log(data);
+        for (carOffer of data.data) {
+            let newOffer = offerTemplate.content.cloneNode(true);
+            newOffer.querySelector(".offer-id").innerText = carOffer.id;
+            newOffer.querySelector(".offer-picture").src = carOffer.vehicle.imageURL;
+            newOffer.querySelector(".book-btn").addEventListener("click", e => {
+                fetch('/addCartItem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            name: carOffer.duration,
+                            price: carOffer.converted.monetaryAmount,
+                            id: carOffer.id,
+                            type: "Car",
+                        }
+                    )
+                }).then(response => {
+                    return response.text();
+                }).then(data => {
+                    console.log(data);
+                    alert("Car rental booked successfully!");
+                }).catch(err => {
+                    console.error(err);
+                });
+            });
+            offerList.appendChild(newOffer);
+            loader.classList.add("d-none");
+        }
     }).catch(err => {
         console.error("Error fetching car data", err);
     });
@@ -52,8 +86,6 @@ window.addEventListener('load', () => {
         const feature = e.detail.features[0];
         // Coordinates are in [longitude, latitude] format
         [longitude, lattitude] = feature.geometry.coordinates;
-        // You can now use lat and lon as needed
-        console.log('Latitude:', lattitude, 'Longitude:', longitude);
     });
 });
 
