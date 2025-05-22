@@ -43,7 +43,27 @@ searchBtn.addEventListener("click", (e) => {
             newOffer.querySelector(".offer-id").innerText = carOffer.id;
             newOffer.querySelector(".offer-picture").src = carOffer.vehicle.imageURL;
             newOffer.querySelector(".book-btn").addEventListener("click", e => {
-                console.log(carOffer.id);
+                fetch('/addCartItem', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(
+                        {
+                            name: carOffer.duration,
+                            price: carOffer.converted.monetaryAmount,
+                            id: carOffer.id,
+                            type: "Car",
+                        }
+                    )
+                }).then(response => {
+                    return response.text();
+                }).then(data => {
+                    console.log(data);
+                    alert("Car rental booked successfully!");
+                }).catch(err => {
+                    console.error(err);
+                });
             });
             offerList.appendChild(newOffer);
         }
