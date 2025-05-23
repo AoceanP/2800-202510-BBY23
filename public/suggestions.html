@@ -13,8 +13,8 @@
   <!-- Custom CSS -->
   <link href="/css/nav.css" rel="stylesheet" />
   <link href="/css/footer.css" rel="stylesheet" />
-  <link href="/css/style.css" rel="stylesheet" />
   <link href="/css/home.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
 </head>
 
 <body class="d-flex flex-column min-vh-100 bg-light">
@@ -23,14 +23,16 @@
 
   <section class="cloud-section">
     <div class="main-card text-center">
-      <main class="container py-4 pb-8">
-        <h1 class="mb-4">Get Travel Suggestions</h1>
+      <main class="container  pb-8">
+        <h1 class="display-6 fw-bold mb-4 text-center">Get Suggestions</h1>
 
         <form id="suggestion-form" class="input-group mb-4">
           <input type="text" id="location" name="location" class="form-control" placeholder="Enter a location" required />
           <button class="btn btn-teal" type="submit">
             <span class="material-icons align-middle"></span>Search</button>
         </form>
+        <span class="loader d-none "></span>
+     
         <div id="suggestions" class="row g-4"></div>
 
         <template id="suggestionTemplate">

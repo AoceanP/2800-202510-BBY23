@@ -179,54 +179,32 @@ html, body {
   padding-bottom: 6rem !important;
 }
 
+}
+
 .loader {
-  width: 10px;
-  height: 10px;
+  width: 16px !important;
+  height: 16px !important;
   border-radius: 50%;
   display: block;
   margin: 15px auto;
   position: relative;
-  color: #006A71;
-  left: -100px;
+  background: #FFF;
+  box-shadow: -24px 0 #FFF, 24px 0 #FFF;
   box-sizing: border-box;
-  animation: shadowRolling 2s linear infinite;
+  animation: shadowPulse 2s linear infinite;
 }
 
-@keyframes shadowRolling {
-  0% {
-    box-shadow: 0px 0 #006A71, 0px 0 #006A71, 0px 0 #006A71, 0px 0 #006A71;
+@keyframes shadowPulse {
+  33% {
+    background: #FFF;
+    box-shadow: -24px 0  #006A71, 24px 0 #FFF;
   }
-
-  12% {
-    box-shadow: 100px 0 #48A6A7, 0px 0 #006A71, 0px 0 #006A71, 0px 0 #006A71;
+  66% {
+    background: #006A71;
+    box-shadow: -24px 0 #FFF, 24px 0 #FFF;
   }
-
-  25% {
-    box-shadow: 110px 0 #48A6A7, 100px 0 #48A6A7, 0px 0 #006A71, 0px 0 #006A71;
-  }
-
-  36% {
-    box-shadow: 120px 0 #48A6A7, 110px 0 #48A6A7, 100px 0 #48A6A7, 0px 0 #006A71;
-  }
-
-  50% {
-    box-shadow: 130px 0 #48A6A7, 120px 0 #48A6A7, 110px 0 #48A6A7, 100px 0 #48A6A7;
-  }
-
-  62% {
-    box-shadow: 200px 0 #006A71, 130px 0 #48A6A7, 120px 0 #48A6A7, 110px 0 #48A6A7;
-  }
-
-  75% {
-    box-shadow: 200px 0 #006A71, 200px 0 #006A71, 130px 0 #48A6A7, 120px 0 #48A6A7;
-  }
-
-  87% {
-    box-shadow: 200px 0 #006A71, 200px 0 #006A71, 200px 0 #006A71, 130px 0 #48A6A7;
-  }
-
   100% {
-    box-shadow: 200px 0 #006A71, 200px 0 #006A71, 200px 0 #006A71, 200px 0 #006A71;
+    background: #FFF;
+    box-shadow: -24px 0 #FFF, 24px 0 #006A71;
   }
-}
 }

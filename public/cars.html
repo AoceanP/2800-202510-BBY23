@@ -33,7 +33,8 @@
 
   <section class="cloud-section">
     <div class="main-card">
-      <main class=" container py-4">
+      <main class="flex-grow-1 container pb-6 pt-1">
+        <h1 class="display-6 fw-bold mb-4 text-center">Car Rental</h1>
         <ul class="list-group">
           <li class="list-group-item d-flex align-items-start rounded-5 mb-3 py-3 px-4 item-card">
             <span class="material-icons text-teal me-3">flight</span>
@@ -107,7 +108,7 @@
           <span class="loader d-none"></span>
         </footer>
         <ul id="car-offers" class="row row-cols-1 row-cols-md-2 g-4 list-unstyled"></ul>
-
+        <span class="loader d-none"></span>
         <template id="car-offer-template">
           <li class="col">
             <div class="card h-100 shadow-sm">
@@ -119,8 +120,9 @@
             </div>
           </li>
         </template>
-  </section>
+
   </main>
+    </section>
   <div id="footerPlaceholder"></div>
   <!-- Scripts -->
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

@@ -1,21 +1,21 @@
-// public/js/activities.js
-
 const searchBtn           = document.querySelector('#searchForm button');
 const activityTemplate    = document.getElementById('activityTemplate');
 const activitiesContainer = document.getElementById('activitiesContainer');
+const loader              = document.querySelector('.loader');
 
 searchBtn.addEventListener('click', async e => {
   e.preventDefault();
 
   const keyword = document.getElementById('searchInput').value.trim();
-  activitiesContainer.innerHTML = '<p>Loading…</p>';
+  activitiesContainer.innerHTML = '';
+  loader.classList.remove('d-none');
 
   try {
     const res = await fetch(`/api/activities?keyword=${encodeURIComponent(keyword)}`);
     if (!res.ok) throw new Error(res.statusText);
 
     const activities = await res.json();
-    activitiesContainer.innerHTML = '';
+    loader.classList.add('d-none');
 
     if (!activities.length) {
       activitiesContainer.innerHTML = `
@@ -27,14 +27,11 @@ searchBtn.addEventListener('click', async e => {
 
     activities.forEach(act => {
       const clone = activityTemplate.content.cloneNode(true);
-
-      // populate the card
-      clone.querySelector('.activity-img').src           = act.pictures?.[0] || '/img/placeholder.png';
-      clone.querySelector('.activity-name').textContent  = act.name;
+      clone.querySelector('.activity-img').src              = act.pictures?.[0] || '/img/placeholder.png';
+      clone.querySelector('.activity-name').textContent     = act.name;
       clone.querySelector('.activity-description').textContent = act.shortDescription || 'No description';
-      clone.querySelector('.activity-price').textContent = `${act.price.currencyCode} ${act.price.amount}`;
+      clone.querySelector('.activity-price').textContent    = `${act.price.currencyCode} ${act.price.amount}`;
 
-      // wire up the button
       const btn = clone.querySelector('.activity-link');
       btn.textContent = 'Add to Cart';
       btn.removeAttribute('href');
@@ -72,6 +69,7 @@ searchBtn.addEventListener('click', async e => {
     });
 
   } catch (err) {
+    loader.classList.add('d-none');
     activitiesContainer.innerHTML = `
       <p class="text-danger">
         Error fetching activities: ${err.message}
