@@ -1,22 +1,22 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const navPlaceholders = document.querySelectorAll('#navbarPlaceholder');
-    fetch('nav.html')
-        .then(response => response.text())
-        .then(data => {
-            navPlaceholders.forEach(placeholder => {
-                const parser = new DOMParser();
-                const navDoc = parser.parseFromString(data, 'text/html');
-                const navContent = navDoc.querySelector('.nav').outerHTML;
-                const title = placeholder.textContent.trim();
-                placeholder.innerHTML = navContent;
-                const navDiv = placeholder.querySelector('.nav');
-                const titleSpan = document.createElement('span');
-                titleSpan.className = 'nav-title';
-                titleSpan.textContent = title;
-                navDiv.appendChild(titleSpan);
-            });
-        })
-        .catch(error => console.error('Error loading nav.html:', error));
+  const navPlaceholders = document.querySelectorAll('#navbarPlaceholder');
+  fetch('nav.html')
+    .then(response => response.text())
+    .then(data => {
+      navPlaceholders.forEach(placeholder => {
+        const parser = new DOMParser();
+        const navDoc = parser.parseFromString(data, 'text/html');
+        const navContent = navDoc.querySelector('nav').outerHTML;
+
+        placeholder.innerHTML = navContent;
+
+        if (window.location.pathname.endsWith('/home')) {
+          const backBtn = placeholder.querySelector('#back-btn');
+          if (backBtn) backBtn.style.display = 'none';
+        }
+      });
+    })
+    .catch(error => console.error('Error loading nav.html:', error));
 
     const footerPlaceholders = document.querySelectorAll('#footerPlaceholder');
     fetch('footer.html')
@@ -28,18 +28,24 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .catch(error => console.error('Error loading footer.html:', error));
 
-    if (document.querySelector("#date-calendar")) {
-        const fp = flatpickr("#date-calendar", {
-            inline: true,
-            mode: "range",
-            minDate: "today",
-            showMonths: 4,
-            dateFormat: "D M j",
-            locale: { firstDayOfWeek: 0 },
-        });
-    }
+        window.goBack = function() {
+            window.location.href = '/planner';
+        };
 
-    window.goBack = function() {
-        window.location.href = '/planner';
-    };
+        fetch('/userName', { credentials: 'include' })
+        .then(r => r.ok ? r.json() : Promise.reject(r))
+        .then(user => {
+          const nameEl = document.getElementById('name-goes-here');
+          if (nameEl) nameEl.textContent = user.name;
+        })
+        .catch(() => {
+        });
+
+      window.goBack = () => { window.location.href = '/planner'; };
+      window.redirectTo = function(path) { window.location.href = path;};
+      
 });
+  
+   
+  
+  

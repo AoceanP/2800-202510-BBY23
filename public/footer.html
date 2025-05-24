@@ -1,40 +1,7 @@
-<footer class="navbar  fixed-bottom border-top">
-  <div class="container d-flex justify-content-around py-2">
-    <div class="nav-item text-center">
-      <button onclick="redirectTo('/home')" class="text-decoration-none text-teal border-0 bg-transparent">
-        <span class="material-icons md-24">home</span><br>
-        <small>Home</small>
-      </button>
-    </div>
-    <div class="nav-item text-center">
-      <button onclick="redirectTo('/search')" class="text-decoration-none text-teal border-0 bg-transparent">
-        <span class="material-icons md-24">search</span><br>
-        <small>Search</small>
-      </button>
-    </div>
-    <div class="nav-item text-center">
-      <button onclick="redirectTo('/trips')" class="text-decoration-none text-teal border-0 bg-transparent">
-        <span class="material-icons md-24">card_travel</span><br>
-        <small>Trips</small>
-      </button>
-    </div>
-    <div class="nav-item text-center">
-      <button onclick="redirectTo('/account')" class="text-decoration-none text-teal border-0 bg-transparent">
-        <span class="material-icons md-24">person</span><br>
-        <small>Account</small>
-      </button>
-    </div>
+
+<footer class="navbar fixed-bottom">
+  <div class="container">
+    <span class="text-muted">© 2025 Xplor. All rights reserved.</span>
+    <button class="lang-selector">Language: English (CA)</button>
   </div>
-  
-  <script>
-  function redirectTo(path) {
-    fetch(path, { method: 'POST' })
-      .then(response => {
-        if (response.redirected) {
-          window.location.href = response.url;
-        }
-      })
-      .catch(error => console.error('Error:', error));
-  }
-  </script>
 </footer>

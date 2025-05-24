@@ -75,9 +75,10 @@ window.addEventListener("DOMContentLoaded", () => {
     clearCanvas();
     drawGrid();
     drawBlock(food.x, food.y, "#ff3333");
-    for (let i = 0; i < snake.length; i++) {
+    for (let i = 1; i < snake.length; i++) {
       drawBlock(snake[i].x, snake[i].y, "#00cc00");
     }
+    drawBlock(snake[0].x, snake[0].y, "#016901");
   }
 
   function moveSnake() {

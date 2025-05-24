@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xplore Hotel Search</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .search-section {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .search-section label {
+            font-weight: bold;
+        }
+
+        .search-section input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex-grow: 1;
+            max-width: 200px;
+        }
+
+        .search-section input[type="text"],
+        .search-section input[type="date"],
+        .search-section input[type="number"] {
+          padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex-grow: 1;
+            max-width: 180px;
+        }
+
+        .search-section button {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .search-section button:hover {
+            background-color: #0056b3;
+        }
+
+        #loading {
+            color: #007bff;
+            font-style: italic;
+            margin-left: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .results-section {
+            display: flex;
+            flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+            gap: 20px;
+        }
+
+        #hotelList {
+            flex: 1; /* Takes up available space */
+            min-width: 300px; /* Minimum width before wrapping */
+            max-height: 600px; /* Limit height for scrollability */
+            overflow-y: auto; /* Enable vertical scrolling */
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 4px;
+            
+        }
+
+        .hotel-card {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .hotel-card h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        .hotel-card p {
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        #map {
+            flex: 2; /* Takes up more space for the map */
+            min-width: 400px; /* Minimum width for the map */
+            height: 600px; /* Fixed height for the map */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 20px;
+            background-color: #eee;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        /* Custom cluster icon styling */
+        .cluster-div {
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+</head>
+<body>
+    <header>
+        <h1>Xplore Hotel Search</h1>
+    </header>
+
+    <main>
+        <section class="search-section">
+            <label for="cityInput">Enter City Code (e.g., NYC, LOND, YVR):</label>
+            <input type="text" id="cityInput" placeholder="e.g., NYC" value="NYC">
+            <label for="checkInDateInput">Check-in Date:</label>
+            <input type="date" id="checkInDateInput">
+            <label for="checkOutDateInput">Check-out Date:</label>
+            <input type="date" id="checkOutDateInput">
+            <label for="adultsInput">Adults:</label>
+            <input type="number" id="adultsInput" value="1" min="1">
+            <button id="searchButton">Search Hotels</button>
+            <div id="loading" class="hidden">Loading hotels... (This may take a while due to API rate limits)</div>
+        </section>
+
+        <section class="results-section">
+            <div id="hotelList" class="hidden">
+                </div>
+            <div id="map" class="hidden"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Xplore Hotel Search</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+    <script type="module" src="js/map_hotel.js"></script>
+</body>
+</html>
