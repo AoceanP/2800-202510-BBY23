@@ -13,6 +13,8 @@ Xplor is an app designed to keep travel costs low, and vacation time high by fin
   * MongoDB 6.16
   * Stripe 18.1.1
   * Google GenAI 0.14
+  * Mapbox
+  * Google Transit API
 * Dev Tools
   * Nodemon 3.1
 
@@ -113,7 +115,8 @@ Root:.
 
 ## Credits, References, and Licenses:
 
-N/A
+* Code used from Google's transit api
+* Code used from Mapbox generative AI
 
 ## APIs and AI Usage:
 
@@ -121,6 +124,7 @@ N/A
 * Google Gen AI - Used for the suggestions page to generate suggestions for budget travel
 * Mongo DB - Used for user and cart storage
 * Stripe - Used to pay for the bookings
+* Mapbox - Used for autofilling addresses and getting the geographic coordinates of the location
 
 ## Contact:
 
