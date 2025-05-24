@@ -21,7 +21,7 @@ let mIcon = null; //
 //Formatting date for API
 function formatDate(date) {
     const d = new Date(date);
-    const year = d.getFullYear;
+    const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
@@ -110,43 +110,95 @@ async function getAccessToken() {
 
 //Batch
 
-async function getHotelRatingsInBatches(hotelIDs, accessToken, batchSize = 10) {
-    const allRatings = [];
-    for (let i = 0; i < hotelIDs.length; i += batchSize) {
-        const batch = hotelIDs.slice(i, i + batchSize);
-        const hotelIdsString = batch.join(',');
 
-        const sentimentsUrl = `https://test.api.amadeus.com/v2/e-reputation/hotel-sentiments?hotelIds=${hotelIdsString}`;
-
-        const sentimentsResponse = await fetch(sentimentsUrl, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
+    async function getHotelOffersByHotelIdsInBatches(hotelIDs, checkInDate, checkOutDate, adults, accessToken, batchSize = 10) {
+        const allOffers = [];
+        for (let i = 0; i < hotelIDs.length; i += batchSize) {
+            const batch = hotelIDs.slice(i, i + batchSize);
+            const hotelIdsString = batch.join(',');
+    
+            const url = new URL(`https://test.api.amadeus.com/v3/shopping/hotel-offers/by-hotel`);
+            url.searchParams.append('hotelIds', hotelIdsString);
+            url.searchParams.append('checkInDate', checkInDate);
+            url.searchParams.append('checkOutDate', checkOutDate);
+            url.searchParams.append('adults', adults);
+            //url.searchParams.append('roomQuantity', 1);
+            //url.searchParams.append('bestRateOnly', 'true');
+    
+            console.log("Fetching hotel offers (batch) URL:", url.toString());
+    
+            try {
+                const response = await fetch(url.toString(), {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+    
+                const data = await response.json();
+                if (!response.ok) {
+                    console.error(`Error fetching offers for batch IDs: ${batch.join(', ')} - ${data.errors?.[0]?.detail || JSON.stringify(data)}`);
+                    // Consider how you want to handle errors for individual batches.
+                    // For now, we'll just log and continue.
+                } else if (data.data && data.data.length > 0) {
+                    allOffers.push(...data.data);
+                }
+            } catch (error) {
+                console.error(`Network error fetching offers for batch IDs: ${batch.join(', ')} - ${error.message}`);
             }
-        });
-
-        const sentimentsData = await sentimentsResponse.json();
-
-        if (!sentimentsResponse.ok) {
-            console.error(`Error fetching sentiments for batch IDs: ${batch.join(', ')} - ${sentimentsData.errors?.[0]?.detail || JSON.stringify(sentimentsData)}`);
+    
+            // Add a delay between batches to avoid hitting rate limits too quickly
+            // Adjust this delay as needed, especially if you get 429 errors.
+            await new Promise(resolve => setTimeout(resolve, 1000)); // 1-second delay
         }
-        else if (sentimentsData.data && sentimentsData.data.length > 0) {
-            allRatings.push(...sentimentsData.data);
-        }
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        return allOffers;
     }
-    return allRatings;
+
+
+//Modified to fetch offers first, then optionally sentiments
+async function searchHotelsAndOffers(cityCode, checkInDate, checkOutDate, adults, accessToken) {
+    let hotelsWithOffers = [];
+    let sentimentsData = [];
+    
+    try {
+    const hotelsFromCitySearch = await getHotelsByCity(cityCode, accessToken);
+
+    if (!hotelsFromCitySearch || hotelsFromCitySearch.length === 0) {
+        console.warn(`No hotels found for city code: ${cityCode}.`);
+        return { hotels: [], ratings: [] };
+    }
+
+    const uniqueHotelIds = [...new Set(hotelsFromCitySearch.map(hotel => hotel.hotelId))];
+
+
+    if (uniqueHotelIds.length > 0) {
+
+        /*
+        try {
+            sentimentsData = await getHotelRatingsInBatches(uniqueHotelIds, accessToken);
+        } catch (error) {
+            console.error(`Problem fetching some hotel ratings in batches: ${error.message}`);
+        }*/
+            console.log(`Workspaceing offers for ${uniqueHotelIds.length} hotels...`);
+            hotelsWithOffers = await getHotelOffersByHotelIdsInBatches(uniqueHotelIds, checkInDate, checkOutDate, adults, accessToken);
+        
+        }
+    } catch (error) {
+        console.error("Error in searchHotelsAndOffers chain:", error);
+        throw error; // Re-throw to be caught by the main click handler
+    }
+    //let sentimentsData = [];
+    return {
+        hotels: hotelsWithOffers,
+        ratings: sentimentsData
+    }
+
 }
 
-async function getHotelOffers(cityCode, checkInDate, checkOutDate, adults, accessToken) {
-    const url = new URL(`https://test.api.amadeus.com/v2/shopping/hotel-offers`);
-    url.searchParams.append('cityCode', cityCode);
-    url.searchParams.append('checkInDate', checkInDate);
-    url.searchParams.append('checkOutDate', checkOutDate);
-    url.searchParams.append('adults', adults);
-    url.searchParams.append('roomQuantity', 1); // Assuming 1 room for simplicity
-    url.searchParams.append('bestRateOnly', 'true');
 
-    console.log("Fetching hotel offers URL:", url.toString());
+async function getHotelsByCity(cityCode, accessToken) {
+    const url = new URL(`https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city`);
+    url.searchParams.append('cityCode', cityCode);
+    console.log("Fetching hotels by city URL:", url.toString());
 
     const response = await fetch(url.toString(), {
         headers: {
@@ -156,58 +208,12 @@ async function getHotelOffers(cityCode, checkInDate, checkOutDate, adults, acces
 
     const data = await response.json();
     if (!response.ok) {
-        throw new Error(`Failed to fetch hotel offers: ${data.errors?.[0]?.detail || JSON.stringify(data)}`);
+        throw new Error(`Failed to fetch hotels by city: ${data.errors?.[0]?.detail || JSON.stringify(data)}`);
     }
-
-    return data.data;
-}
-
-//Modified to fetch offers first, then optionally sentiments
-async function searchHotelsAndOffers(cityCode, checkInDate, checkOutDate, adults, accessToken) {
-    const hotelsWithOffers = await getHotelOffers(cityCode, checkInDate, checkOutDate, adults, accessToken);
-
-    if (!hotelsWithOffers || hotelsWithOffers.length === 0) {
-        console.warn(`No hotel offers found for city code: ${cityCode} with the given dates and adults.`);
-        return { hotels: [], ratings: [] };
-    }
-
-    const uniqueHotelIds = [...new Set(hotelsWithOffers.map(hotelOffer => hotelOffer.hotel.hotelId))];
-
-    let sentimentsData = [];
-    if (uniqueHotelIds.length > 0) {
-        try {
-            sentimentsData = await getHotelRatingsInBatches(uniqueHotelIds, accessToken);
-        } catch (error) {
-            console.error(`Problem fetching some hotel ratings in batches: ${error.message}`);
-        }
-    }
-    return {
-        hotels: hotelsWithOffers,
-        ratings: sentimentsData
-    }
-
+        return data.data;
 }
 
 /*
-async function getHotelByCity(cityCode, accessToken) {
-    const url = `https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=${cityCode}`;
-    
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${accessToken}`
-        }
-    });
-
-    const hotelsData = await response.json();
-    if (!response.ok) {
-        throw new Error(`Failed to fetch hotels by city: ${hotelsData.errors?.[0]?.detail || JSON.stringify(hotelsData)}`);
-    }
-
-    if (!hotelsData.data || hotelsData.data.length === 0) {
-        console.warn(`No hotels found for city code: ${cityCode}. Cannot fetch ratings.`);
-        return {hotels: [], ratings: []};
-    }
-
     const hotelIdsForRatings = hotelsData.data.map(hotel => hotel.hotelId);
 
     //Call the batching function
@@ -262,9 +268,9 @@ function displayHotels(hotelOffers, ratings) {
         return;
     }
 
-    hotelOffers.forEach(hotelOffers => {
-        const hotel = hotelOffers.hotel;
-        const offer = hotelOffers.offers[0];
+    hotelOffers.forEach(hotelOfferItem => {
+        const hotel = hotelOfferItem.hotel;
+        const offer = hotelOfferItem.offers[0];
 
         const hotelRating = ratings.find(rating => rating.hotelId === hotel.hotelId);
         const overallRating = hotelRating ? hotelRating.overallRating || 'N/A' : 'N/A';
@@ -282,8 +288,6 @@ function displayHotels(hotelOffers, ratings) {
                 <p><strong>Chain Code:</strong> ${hotel.chainCode || 'N/A'}</p>
                 <p><strong>Overall Rating:</strong> ${overallRating}</p>
                 <p><strong>Price:</strong> ${price}</p>
-                <p><strong>Room Type:</strong> ${roomType}</p>
-                <p><strong>Board Type:</strong> ${boardType}</p>
         `;
 
         if (sentiments) {
