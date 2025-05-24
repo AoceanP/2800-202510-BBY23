@@ -183,8 +183,8 @@ app.get('/login', (req, res) => {
     if (req.session.user) {
         res.redirect("/home");
     } else {
-        res.render('login', { error: req.session.error || null });
         req.session.error = null;
+        res.render('login', { error: req.session.error || null });
     }
 });
 
@@ -215,6 +215,7 @@ app.post('/loginUser', async (req, res, next) => {
             req.session.error = "Email or password doesn't match.";
             return res.redirect("/login");
         }
+        req.session.error = null;
         user.password = "";
         req.session.user = user;
         res.redirect("/home");
